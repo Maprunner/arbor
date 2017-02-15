@@ -1,0 +1,29 @@
+.arbor-footer {
+  background-color: #ddd;
+  color: black;
+  border-top: 4px solid black;
+  box-shadow: 0 500px 0 500px #ddd;
+}
+
+.arbor-logo {
+  padding: 0 15px 10px 15px;
+  width: 100%;
+}
+
+.footer-photo {
+  padding: 20px 0 0 20px;
+  width: 250px;
+  height: 217px;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.badge {
+  margin-left: 10px;
+}
+
+.btn {
+  margin-bottom: 6px;
+}
