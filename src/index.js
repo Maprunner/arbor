@@ -7,6 +7,7 @@ import { routerMiddleware, syncHistoryWithStore } from 'react-router-redux';
 import thunkMiddleware from 'redux-thunk';
 import Page from './Page';
 import Events from './Events';
+import Champions from './Champions';
 import Person from './Person';
 import Fight from './Fight';
 import About from './About';
@@ -37,6 +38,7 @@ ReactDOM.render(
         <Route path='fight/(:name1)/(:name2)' component={Fight}/>
         <Route path='event/(:id)' component={SingleEvent}/>
         <Route path='about' component={About}/>
+        <Route path='champions' component={Champions}/>
         <Route path='*' component={Events} />
       </Route>
     </Router>

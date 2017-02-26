@@ -5,10 +5,18 @@ class Arbor {
 public static function getEvents($f3) {
   $db = $f3->get("db.instance");
   $raceTable = new DB\SQL\Mapper($db,'race');
-  $data = $raceTable->find(array(), array('order'=>'Event ASC, Year DESC'));
-  foreach ($data as &$record) {
+  $events = $raceTable->find(array(), array('order'=>'Event ASC, Year DESC'));
+  foreach ($events as &$record) {
     $record = $record->cast();
   }
+  $championTable = new DB\SQL\Mapper($db,'champion');
+  $champions = $championTable->find(array(), array('order'=>'Year DESC, Event ASC'));
+  foreach ($champions as &$record) {
+    $record = $record->cast();
+  }
+  $data = [];
+  $data["events"] = $events;
+  $data["champions"] = $champions;
   echo json_encode($data);
 }
   

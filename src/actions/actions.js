@@ -23,10 +23,11 @@ export function selectName(name) {
   }
 }
 
-export function saveEvents(eventData) {
+export function saveEvents(data) {
   return {
     type: SAVE_EVENTS,
-    events: eventData
+    events: data.events,
+    champions: data.champions
   }
 }
 

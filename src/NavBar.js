@@ -23,6 +23,7 @@ class NavBar extends Component {
       <div className="collapse navbar-collapse" id="arbor-navbar">
         <ul className="nav navbar-nav">
           <li><Link to="/">All events</Link></li>
+          <li><Link to="/champions">Champions</Link></li>
           <li><Link to="/person">Name search</Link></li>
           <li><Link to="/fight">Fight!</Link></li>
         </ul>

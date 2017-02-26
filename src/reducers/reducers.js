@@ -6,7 +6,8 @@ import { routerReducer } from 'react-router-redux';
 const initEvents = {
   eventData: [],
   currentRaceID: null,
-  currentEventDetails: []
+  currentEventDetails: [],
+  champions: []
 }
 
 function getEventDetailsIndex(events, raceID) {
@@ -28,6 +29,7 @@ function eventReducer(state = initEvents, action) {
       }
       return Object.assign({}, state, {
         eventData: action.events,
+        champions: action.champions,
         currentEventDetails: currentDetails 
       })
     case SELECT_EVENT:
