@@ -54,7 +54,7 @@ const Person = React.createClass({
           name={this.props.name}
           results={this.props.results}
           onRowSelected={this.props.onRowSelected}
-        />;
+        />
       </div>
     )
   }

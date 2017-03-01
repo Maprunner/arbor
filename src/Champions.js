@@ -41,7 +41,7 @@ const Champions = React.createClass({
         <ChampionTable
           champions={this.props.champions}
           onCellClicked={this.props.onCellClicked}
-        />;
+        />
       </div>
     )
   }

@@ -65,7 +65,7 @@ class NameTable extends Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
   
   onGridReady(props) {

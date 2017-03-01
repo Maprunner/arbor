@@ -14,7 +14,7 @@ class Page extends Component {
         </div>
         <Footer />
       </div>
-    );
+    )
   }
 }
 

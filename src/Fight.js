@@ -69,7 +69,7 @@ const Fight = React.createClass({
           name1={this.props.name1}
           name2={this.props.name2}
           results={this.props.results}
-        />;
+        />
       </div>
     )
   }
