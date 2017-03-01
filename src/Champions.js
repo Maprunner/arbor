@@ -19,7 +19,7 @@ const mapDispatchToProps = (dispatch) => {
         // don't try to load names with ( which shows a club abbreviation for a relay
         // or / which shows a joint winner which we can't easily deal with
         // regex is "name doesn't match some characters followed by ( or /"
-        if (!/.*[(|\/]/.test(name)) {
+        if (!/.*[(|/]/.test(name)) {
           dispatch(selectName(name));
           dispatch(fetchName(name));
           dispatch(push('/person/' + name));
