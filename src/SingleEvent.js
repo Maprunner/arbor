@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 import EventSummaryTable from './EventSummaryTable';
 import ClassResultTable from './ClassResultTable';
 import { selectEvent, fetchName, selectName, fetchResults, filterClasses } from './actions/actions.js';
-import { push } from 'react-router-redux'
+import { push } from 'react-router-redux';
+import DocumentTitle from 'react-document-title';
+import { getEventAbbreviation } from './utils.js';
 
 const mapStateToProps = (state) => {
   return {
@@ -54,15 +56,18 @@ const SingleEvent = React.createClass({
   },
   
   render: function() {
+    const title = (getEventAbbreviation(this.props.currentEventDetails) || "Arbor | Event results");
 		return (
       <div className="row">
         <div className="col-md-12">
           <div className="panel panel-primary">
             <div className="panel-heading">Event Summary</div>
             <div className="panel-body ag-fresh">
-              <EventSummaryTable
-                rowData={this.props.currentEventDetails}
-		          />
+              <DocumentTitle title={title}>
+                <EventSummaryTable
+                  rowData={this.props.currentEventDetails}
+		            />
+              </DocumentTitle>
             </div>
           </div>
           <div className="panel panel-primary">

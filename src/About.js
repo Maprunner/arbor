@@ -10,16 +10,17 @@ const About = ()=> (
 The back end is written using the <a href="https://fatfreeframework.com/3.6/home">Fat-Free php framework</a> with a SQLite database.
 </p>
 <span>
-The front end is based on <a href="https://github.com/facebookincubator/create-react-app">Create React App</a> and uses:
+The front end is based on <a href="https://github.com/facebookincubator/create-react-app">Create React App</a> and uses amongst other things:
   <ul>
-    <li>React</li>
-    <li>React-redux</li>
-    <li>React-router</li>
-    <li>React-redux</li>
-    <li>React-router-redux</li>
-    <li>axios</li>
-    <li>ag-grid</li>
-    <li>ag-grid-react</li>
+    <li><a href="https://facebook.github.io/react/">React</a></li>
+    <li><a href="https://github.com/reactjs/react-redux">React-redux</a></li>
+    <li><a href="https://github.com/ReactTraining/react-router">React-router</a></li>
+    <li><a href="https://github.com/reactjs/react-redux">React-redux</a></li>
+    <li><a href="https://github.com/reactjs/react-router-redux">React-router-redux</a></li>
+    <li><a href="http://getbootstrap.com/">Bootstrap</a></li>
+    <li><a href="https://github.com/mzabriskie/axios">axios</a></li>
+    <li><a href="https://www.ag-grid.com/">ag-grid</a></li>
+    <li><a href="https://github.com/ceolter/ag-grid-react">ag-grid-react</a></li>
   </ul>
 </span>
 <p>

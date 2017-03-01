@@ -3,6 +3,7 @@ import FightTable from './FightTable';
 import NameSearch from './NameSearch';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux'
+import DocumentTitle from 'react-document-title';
 import { selectFightNames, fetchFight } from './actions/actions.js';
 
 const mapStateToProps = (state) => {
@@ -57,10 +58,12 @@ const Fight = React.createClass({
   render: function() {
     return (
       <div>
-        <NameSearch 
-          onNameSelected={this.onName1Selected}
-          caption="Runner 1"
-        />
+        <DocumentTitle title="Arbor | Fight">
+          <NameSearch 
+            onNameSelected={this.onName1Selected}
+            caption="Runner 1"
+          />
+        </DocumentTitle>
         <NameSearch 
           onNameSelected={this.onName2Selected}
           caption="Runner 2"
@@ -69,7 +72,7 @@ const Fight = React.createClass({
           name1={this.props.name1}
           name2={this.props.name2}
           results={this.props.results}
-        />;
+        />
       </div>
     )
   }
