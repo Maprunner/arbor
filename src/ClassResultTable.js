@@ -3,17 +3,14 @@ import {AgGridReact} from 'ag-grid-react';
 import ClassFilter from './ClassFilter';
 import '../node_modules/ag-grid/dist/styles/ag-grid.css';
 import '../node_modules/ag-grid/dist/styles/theme-fresh.css';
+import { formatPosition } from './utils.js';
 
 class ClassResultTable extends Component {
-
-  formatPosition(params) {
-    return parseInt(params.value, 10) === 999 ? "-" : params.value;
-  }
 
   render(props) {
 const columnDefs = [
   {headerName: 'Class', field: 'Class', width: 100, cellClass: "center-text"},
-  {headerName: 'Position', field: 'Position', width: 100, cellClass: "center-text", cellRenderer: this.formatPosition},
+  {headerName: 'Position', field: 'Position', width: 100, cellClass: "center-text", cellRenderer: formatPosition},
   {headerName: 'Name', field: 'Name', width: 200},
   {headerName: 'Club', field: 'Club', width: 100, cellClass: "center-text"},
   {headerName: 'Time', field: 'Time', width: 100, cellClass: "center-text"},

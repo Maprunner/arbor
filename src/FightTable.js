@@ -49,7 +49,7 @@ class FightTable extends Component {
     {headerName: 'Place', field: 'Position2', width: 65, cellClass: "center-text", cellRenderer: this.formatPosition},
 
     ];
-    const info = "Fight: " + this.props.name1 + " v. " + this.props.name2;
+    const info = "Fight: " + (this.props.name1 || "Runner 1") + " v. " + (this.props.name2 || "Runner 2");
     let r1Wins;
     if (this.props.results.length === 0) {
       r1Wins = 0;

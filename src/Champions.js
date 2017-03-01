@@ -1,5 +1,6 @@
 import React from 'react';
 import ChampionTable from './ChampionTable';
+import DocumentTitle from 'react-document-title';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux'
 import { selectEvent, fetchResults, selectName, fetchName } from './actions/actions.js';
@@ -37,12 +38,12 @@ const mapDispatchToProps = (dispatch) => {
 const Champions = React.createClass({
   render: function() {
     return (
-      <div>
+      <DocumentTitle title="Arbor | Champions">
         <ChampionTable
           champions={this.props.champions}
           onCellClicked={this.props.onCellClicked}
         />
-      </div>
+      </DocumentTitle>
     )
   }
 })

@@ -4,12 +4,9 @@ import '../node_modules/ag-grid/dist/styles/ag-grid.css';
 import '../node_modules/ag-grid/dist/styles/theme-fresh.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
+import { formatLink } from './utils.js';
 
 class EventsTable extends Component {
-  formatLink(params) {
-    return ((params.data.Link === "") || (params.data.Link === null)) ? "":
-    "<a href='" + params.data.Link + "' target='_blank'>Map</a>";
-  }
 
   render() {
 const columnDefs = [
@@ -21,7 +18,7 @@ const columnDefs = [
   {headerName: 'Classes', field: 'Classes', width: 100, cellClass: "center-text"},
   {headerName: 'Runners', field: 'Runners', width: 100, cellClass: "center-text"},
   {headerName: 'Area', field: 'Area', width: 250, cellRenderer: this.formatArea},
-  {headerName: 'Link', field: 'Link', width: 75, cellRenderer: this.formatLink},
+  {headerName: 'Link', field: 'Link', width: 75, cellRenderer: formatLink},
   {headerName: 'Assoc', field: 'Association', width: 100, cellClass: "center-text"}
 ];
     return (

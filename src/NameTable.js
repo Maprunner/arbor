@@ -5,12 +5,10 @@ import '../node_modules/ag-grid/dist/styles/theme-fresh.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 import { Badge } from 'react-bootstrap';
+import { formatPosition } from './utils.js';
 
 class NameTable extends Component {
-  formatPosition(params) {
-    return parseInt(params.value, 10) === 999 ? "-" : params.value;
-  }
-  
+
   countEntries(eventName) {
     const count = this.props.results.reduce(function(total, event) {
       return event.Event === eventName ? total + 1: total;
@@ -25,7 +23,7 @@ class NameTable extends Component {
     {headerName: 'Year', field: 'Year', width: 75, cellClass: "center-text"},
     {headerName: 'Area', field: 'Area', width: 250},
     {headerName: 'Class', field: 'Class', width: 100, cellClass: "center-text"},
-    {headerName: 'Position', field: 'Position', width: 100, cellClass: "center-text", cellRenderer: this.formatPosition},
+    {headerName: 'Position', field: 'Position', width: 100, cellClass: "center-text", cellRenderer: formatPosition},
     {headerName: 'Name', field: 'Name', width: 200},
     {headerName: 'Club', field: 'Club', width: 100, cellClass: "center-text"},
     {headerName: 'Time', field: 'Time', width: 100, cellClass: "center-text"},

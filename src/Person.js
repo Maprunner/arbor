@@ -2,7 +2,8 @@ import React from 'react';
 import NameTable from './NameTable';
 import NameSearch from './NameSearch';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux'
+import { push } from 'react-router-redux';
+import DocumentTitle from 'react-document-title';
 import { selectEvent, fetchResults, selectName, fetchName } from './actions/actions.js';
 
 const mapStateToProps = (state) => {
@@ -44,12 +45,15 @@ const Person = React.createClass({
   },  
   
   render: function() {
+    const title = (this.props.name || " Arbor | Name search");
     return (
       <div>
-        <NameSearch 
-          onNameSelected={this.props.onNameSelected}
-          caption="Name search"
-        />
+        <DocumentTitle title={title}>
+          <NameSearch 
+            onNameSelected={this.props.onNameSelected}
+            caption="Name search"
+          />
+        </DocumentTitle>
         <NameTable
           name={this.props.name}
           results={this.props.results}
