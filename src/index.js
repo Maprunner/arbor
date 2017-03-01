@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Route, Router, IndexRoute, browserHistory } from 'react-router';
+import { createHistory } from 'history'
+import { Route, Router, IndexRoute, useRouterHistory } from 'react-router';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { routerMiddleware, syncHistoryWithStore } from 'react-router-redux';
@@ -15,13 +16,18 @@ import SingleEvent from './SingleEvent';
 import reducers from './reducers/reducers.js';
 import { fetchEvents } from './actions/actions.js';
 
+
+const browserHistory = useRouterHistory(createHistory)({
+  basename: '/arbor'
+})
+
 export const store = createStore(
   reducers, 
   applyMiddleware(
     thunkMiddleware,
     routerMiddleware(browserHistory)
   )
-);
+)
 
 const history = syncHistoryWithStore(browserHistory, store)
 
