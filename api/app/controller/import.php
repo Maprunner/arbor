@@ -20,7 +20,11 @@ public static function importEvents($f3) {
   if (file_exists('data/'.$file.'.xml')) {
     $this->importXML('data/'.$file.'.xml');
   } else {
-    $this->importCSV('data/'.$file.'.csv');
+    if (file_exists('data/'.$file.'.csv')) {
+      $this->importCSV('data/'.$file.'.csv');
+    } else {
+      echo "File not found.<br>";
+    }
   }
   
   $this->db->commit();
@@ -44,14 +48,15 @@ private function importCSV($file) {
   $oldClass = '';
   $runners = 0;
   
-  define('FIELD_COUNT', 11);
-  define('POS_IDX', 1);
-  define('FIRST_NAME_IDX', 2);
-  define('LAST_NAME_IDX', 3);
-  define('CLUB_IDX', 4);
-  define('CLASS_IDX', 6);
-  define('TIME_IDX', 7);
-  define('LENGTH_IDX', 9);
+  define('FIELD_COUNT', 7);
+  define('POS_IDX', 0);
+  define('FIRST_NAME_IDX', 1);
+  //define('LAST_NAME_IDX', 3);
+  define('CLUB_IDX', 2);
+  define('CLASS_IDX', 3);
+  define('TIME_IDX', 5);
+  define('STATUS_IDX', 6);
+  define('LENGTH_IDX', 4);
 
   foreach ($lines as $line) {
     $r = explode(",", trim($line));
@@ -87,18 +92,20 @@ private function importCSV($file) {
   	$result->BOFID = 0;
     $result->Year = $race->Year;
     $result->Event = $this->getEventAbbr($race->Event);
-    $result->Name = $r[FIRST_NAME_IDX].' '.$r[LAST_NAME_IDX];
-  	$result->Club = $r[CLUB_IDX];
+    //$result->Name = $r[FIRST_NAME_IDX].' '.$r[LAST_NAME_IDX];
+    $result->Name = $r[FIRST_NAME_IDX];
+    $result->Club = $r[CLUB_IDX];
     $result->Card = 0;
     $result->Class = $r[CLASS_IDX];
     $result->ClassID = $classTable->ClassID;
   	$result->Time = $r[TIME_IDX];
   	$result->Position = $r[POS_IDX];
-  	if ($result->Position == 999){
-      $result->Status = 'dnf';
-    } else {
-      $result->Status = 'OK';
-    }
+  	//if ($result->Position == 999){
+    //  $result->Status = 'dnf';
+    //} else {
+    //  $result->Status = 'OK';
+    //}
+    $result->Status = $r[STATUS_IDX];
     $result->save();
     //echo 'Save '.$result->Name.'<br>';
 		$classRunners++;
