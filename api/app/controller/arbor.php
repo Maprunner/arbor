@@ -43,10 +43,13 @@ public function getEvent($f3) {
 public function getName($f3) {
   $db = $f3->get("db.instance");
   $name = $f3->get('PARAMS.name');
+  $wocsql = "SELECT RaceID, Year, Event, 'Area', Name, Club, Class, Time, Position, Status FROM ";
+  $wocsql .= "wocresult where Name = ? ORDER BY Year DESC";
+  $wocdata = $db->exec($wocsql, $name);
   $sql = "SELECT r.RaceID, r.Year, r.Event, Area, Name, t.Club, Class, Time, Position, Status FROM ";
   $sql .= "race r JOIN result t WHERE r.RaceID=t.RaceID AND t.Name = ? ORDER BY r.Year DESC";
   $data = $db->exec($sql, $name);
-  echo json_encode($data);
+  echo json_encode(array_merge($data, $wocdata));
 }
   
 public function nameSearch($f3) {
