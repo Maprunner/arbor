@@ -2,7 +2,6 @@ import React from 'react';
 import FightTable from './FightTable';
 import NameSearch from './NameSearch';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux'
 import DocumentTitle from 'react-document-title';
 import { selectFightNames, fetchFight } from './actions/actions.js';
 
@@ -20,14 +19,14 @@ const mapDispatchToProps = (dispatch) => {
     onFightSelected: (name1, name2, doPush = true) => {
       dispatch(fetchFight(name1, name2));
       if (doPush) {
-        dispatch(push('/fight/' + name1 + "/" + name2));
+        //dispatch(push('/fight/' + name1 + "/" + name2));
       }
     }
   }
 }
 
-const Fight = React.createClass({
-  componentDidMount () {
+class Fight extends React.Component {
+  componentDidMount() {
     if ((this.props.name1 === null) && (this.props.name2 === null)) {
       // check for deep link to a particular fight that needs to be loaded
       // location.pathname is e.g. '/fight/Simon%20Errington/Helen%20Errington'
@@ -39,32 +38,32 @@ const Fight = React.createClass({
         this.props.onFightSelected(name1, name2, false);
       }
     }
-  },  
+  }
 
-  onName1Selected (name1) {
+  onName1Selected(name1) {
     this.props.dispatch(selectFightNames(name1, this.props.name2));
     if (this.props.name2 !== null) {
       this.props.onFightSelected(name1, this.props.name2);
     }
-  },
+  }
 
-  onName2Selected (name2) {
+  onName2Selected(name2) {
     this.props.dispatch(selectFightNames(this.props.name1, name2));
     if (this.props.name1 !== null) {
       this.props.onFightSelected(this.props.name1, name2);
     }
-  },
+  }
 
-  render: function() {
+  render() {
     return (
       <div>
         <DocumentTitle title="Arbor | Fight">
-          <NameSearch 
+          <NameSearch
             onNameSelected={this.onName1Selected}
             caption="Runner 1"
           />
         </DocumentTitle>
-        <NameSearch 
+        <NameSearch
           onNameSelected={this.onName2Selected}
           caption="Runner 2"
         />
@@ -76,7 +75,7 @@ const Fight = React.createClass({
       </div>
     )
   }
-})
+}
 
 export default connect(
   mapStateToProps,

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/css/bootstrap-theme.css';
-import { Button, ButtonToolbar } from 'react-bootstrap';
+import PropTypes from 'prop-types';
+import ButtonToolbar from 'react-bootstrap/Button';
+import Button from 'react-bootstrap/Button';
 
 class ClassFilter extends Component {
   onClickSingleClass(event) {
@@ -13,22 +13,22 @@ class ClassFilter extends Component {
   }
 
   render() {
-    
-    let classes = this.props.classes.map(function(name, index) {
-      return(
-        <Button 
+
+    let classes = this.props.classes.map(function (name, index) {
+      return (
+        <Button
           bsStyle="default"
-          onClick={this.onClickSingleClass.bind(this, {name})}
+          onClick={this.onClickSingleClass.bind(this, { name })}
           key={index}
           className="btn btn-default">{name}</Button>
       );
     }, this);
-		
+
     return (
       <div>
         <ButtonToolbar>
           {classes}
-          <Button 
+          <Button
             bsStyle="success"
             onClick={this.onClickAllClasses.bind(this, "All")}
             className="btn btn-default">Show all
@@ -40,8 +40,8 @@ class ClassFilter extends Component {
 }
 
 ClassFilter.propTypes = {
-  classes: React.PropTypes.array.isRequired,
-  onClassFilterUpdated: React.PropTypes.func.isRequired
+  classes: PropTypes.array.isRequired,
+  onClassFilterUpdated: PropTypes.func.isRequired
 };
 
 export default ClassFilter;

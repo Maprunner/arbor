@@ -2,7 +2,6 @@ import React from 'react';
 import NameTable from './NameTable';
 import NameSearch from './NameSearch';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import DocumentTitle from 'react-document-title';
 import { selectEvent, fetchResults, selectName, fetchName } from './actions/actions.js';
 
@@ -19,20 +18,20 @@ const mapDispatchToProps = (dispatch) => {
       const raceID = parseInt(event.node.data.RaceID, 10);
       dispatch(selectEvent(raceID));
       dispatch(fetchResults(raceID));
-      dispatch(push('/event/' + raceID));
+      //dispatch(push('/event/' + raceID));
     },
     onNameSelected: (name, doPush = true) => {
       dispatch(selectName(name));
       dispatch(fetchName(name));
       if (doPush) {
-        dispatch(push('/person/' + name));
+        //dispatch(push('/person/' + name));
       }
     }
   }
 }
 
-const Person = React.createClass({
-  componentDidMount () {
+class Person extends React.Component {
+  componentDidMount() {
     if (this.props.name === null) {
       // check for deep link to a particular name that needs to be loaded
       // location.pathname is e.g. '/person/Simon%20Errington'
@@ -42,14 +41,14 @@ const Person = React.createClass({
         this.props.onNameSelected(name, false);
       }
     }
-  },  
-  
-  render: function() {
+  }
+
+  render() {
     const title = (this.props.name || " Arbor | Name search");
     return (
       <div>
         <DocumentTitle title={title}>
-          <NameSearch 
+          <NameSearch
             onNameSelected={this.props.onNameSelected}
             caption="Name search"
           />
@@ -62,7 +61,7 @@ const Person = React.createClass({
       </div>
     )
   }
-})
+}
 
 export default connect(
   mapStateToProps,
