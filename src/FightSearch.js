@@ -7,13 +7,10 @@ import axios from 'axios';
 import { axiosConfig } from './actions/actions.js';
 
 class FightSearch extends React.Component {
-
-  getInitialState() {
-    return {
-      options: [],
-      name1: null,
-      name2: null
-    };
+  state = {
+    options: [],
+    name1: null,
+    name2: null
   }
 
   render() {

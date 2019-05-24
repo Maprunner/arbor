@@ -1,6 +1,7 @@
 import React from 'react';
 import EventsTable from './EventsTable';
 import { connect } from 'react-redux';
+import { withRouter } from "react-router";
 import { selectEvent, fetchResults } from './actions/actions.js';
 
 const mapStateToProps = (state) => {
@@ -9,13 +10,13 @@ const mapStateToProps = (state) => {
   };
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onRowSelected: (event) => {
       const raceID = event.node.data.RaceID;
       dispatch(selectEvent(raceID));
       dispatch(fetchResults(raceID));
-      //dispatch(push('/event/' + raceID));
+      ownProps.history.push('/event/' + raceID);
     }
   }
 }
@@ -29,7 +30,7 @@ class Events extends React.Component {
   }
 }
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(Events)
+)(Events))

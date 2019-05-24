@@ -2,6 +2,7 @@ import React from 'react';
 import NameTable from './NameTable';
 import NameSearch from './NameSearch';
 import { connect } from 'react-redux';
+import { withRouter } from "react-router";
 import DocumentTitle from 'react-document-title';
 import { selectEvent, fetchResults, selectName, fetchName } from './actions/actions.js';
 
@@ -12,19 +13,19 @@ const mapStateToProps = (state) => {
   };
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onRowSelected: (event) => {
       const raceID = parseInt(event.node.data.RaceID, 10);
       dispatch(selectEvent(raceID));
       dispatch(fetchResults(raceID));
-      //dispatch(push('/event/' + raceID));
+      ownProps.history.push('/event/' + raceID);
     },
     onNameSelected: (name, doPush = true) => {
       dispatch(selectName(name));
       dispatch(fetchName(name));
       if (doPush) {
-        //dispatch(push('/person/' + name));
+        ownProps.history.push('/person/' + name);
       }
     }
   }
@@ -63,7 +64,7 @@ class Person extends React.Component {
   }
 }
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(Person)
+)(Person))

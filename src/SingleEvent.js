@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from "react-router";
 import EventSummaryTable from './EventSummaryTable';
 import ClassResultTable from './ClassResultTable';
 import { selectEvent, fetchName, selectName, fetchResults, filterClasses } from './actions/actions.js';
@@ -16,14 +17,14 @@ const mapStateToProps = (state) => {
   };
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onNameSelected: (event) => {
       const name = event.node.data.Name;
       dispatch(selectName(name));
       dispatch(fetchName(name));
-      //dispatch(push('/person/' + name));
-    },
+      ownProps.history.push('/person/' + name);
+      },
     onClassFilterUpdated: (newFilter) => {
       dispatch(filterClasses(newFilter));
     },
@@ -87,7 +88,7 @@ class SingleEvent extends React.Component {
   }
 }
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(SingleEvent)
+)(SingleEvent))

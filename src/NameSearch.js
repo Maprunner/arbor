@@ -1,30 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Card } from 'react-bootstrap';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 import axios from 'axios';
 import { axiosConfig } from './actions/actions.js';
 
 class NameSearch extends React.Component {
-
-  getInitialState() {
-    return {
-      options: [],
-    };
+  state = {
+    options: [],
+    isLoading: false
   }
 
   render() {
     return (
       <div className="row">
         <div className="col-md-12">
-          <div className="panel panel-primary">
-            <div className="panel-heading">{this.props.caption}</div>
-            <div className="panel-body ag-theme-fresh" style={{ height: "50px", marginBottom: "10px" }}>
+          <Card>
+            <Card.Header>{this.props.caption}</Card.Header>
+            <Card.Body className="ag-theme-fresh" style={{ height: "50px", marginBottom: "10px" }}>
               <AsyncTypeahead
+                {...this.state}
                 ref="nameTypeAhead"
+                id="name-search"
                 labelKey="Name"
                 onSearch={this.handleSearch}
                 onChange={this.handleInput}
-                options={this.state.options}
+                {...this.state}
                 placeholder="Name search..."
                 caseSensitive={false}
                 minLength={3}
@@ -32,8 +34,8 @@ class NameSearch extends React.Component {
                   <div><span>{option.Name}</span></div>
                 )}
               />
-            </div>
-          </div>
+            </Card.Body>
+          </Card>
         </div>
       </div>
     );
@@ -41,9 +43,10 @@ class NameSearch extends React.Component {
 
   handleSearch(query) {
     // know we have at least 3 characters because of minLength property
+    this.setState({ isLoading: true });
     axios.get('/namesearch/' + query, axiosConfig)
       .then(json => {
-        this.setState({ options: json.data });
+        this.setState({ options: json.data, isLoading: false });
       });
   }
 

@@ -1,48 +1,44 @@
 import React from 'react';
-import { Nav, Navbar, NavItem } from 'react-bootstrap';
+import { Nav, Navbar } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import './Arbor.css';
 import pic from './img/arborbanner.jpg';
 
 const NavigationBar = () => (
-  // generates "Unknown prop `active` on <a> tag" warning when reloaded
-  // see https://github.com/react-bootstrap/react-router-bootstrap/issues/185
-  // live with this for now since you only see it in the console output
-  // <div>
-  //   <Navbar inverse collapseOnSelect>
-  //     <Navbar.Header>
-  //       <Navbar.Brand>
-  //         <LinkContainer to='/'>
-  //           <a>All events</a>
-  //         </LinkContainer>
-  //       </Navbar.Brand>
-  //       <Navbar.Toggle />
-  //     </Navbar.Header>
-  //     <Navbar.Collapse>
-  //       <Nav>
-  //         <LinkContainer to='/champions'>
-  //           <NavItem eventKey={1}>Champions</NavItem>
-  //         </LinkContainer>
-  //         <LinkContainer to='/person'>
-  //           <NavItem eventKey={2}>Name search</NavItem>
-  //         </LinkContainer>
-  //         <LinkContainer to='/fight'>
-  //           <NavItem eventKey={3}>Fight!</NavItem>
-  //         </LinkContainer>
-  //       </Nav>
-  //       <Nav pullRight>
-  //         <LinkContainer to='/about'>
-  //           <NavItem eventKey={1}>About</NavItem>
-  //         </LinkContainer>
-  //       </Nav>
-  //     </Navbar.Collapse>
-  //   </Navbar>
-  <div className="container">
-    <div className="row">
-      <img className="arbor-logo" src={pic} alt="Arbor logo" title="Arbor logo"></img>
+  <div>
+    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" className="p-0">
+      >
+      <div className="container">
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse>
+          <Nav className="mr-auto">
+            <LinkContainer to='/'>
+              <Nav.Link eventKey={1}>All events</Nav.Link>
+            </LinkContainer>
+            <LinkContainer to='/champions'>
+              <Nav.Link eventKey={2}>Champions</Nav.Link>
+            </LinkContainer>
+            <LinkContainer to='/person'>
+              <Nav.Link eventKey={3}>Name search</Nav.Link>
+            </LinkContainer>
+            <LinkContainer to='/fight'>
+              <Nav.Link eventKey={4}>Fight!</Nav.Link>
+            </LinkContainer>
+          </Nav>
+          <Nav>
+            <LinkContainer to='/about'>
+              <Nav.Link eventKey={1}>About</Nav.Link>
+            </LinkContainer>
+          </Nav>
+        </Navbar.Collapse>
+      </div>
+    </Navbar>
+    <div className="container">
+      <div className="row">
+        <img className="arbor-logo" src={pic} alt="Arbor logo" title="Arbor logo"></img>
+      </div>
     </div>
   </div>
-  // </div>
 )
 
 export default NavigationBar;

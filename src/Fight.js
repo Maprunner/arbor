@@ -2,6 +2,7 @@ import React from 'react';
 import FightTable from './FightTable';
 import NameSearch from './NameSearch';
 import { connect } from 'react-redux';
+import { withRouter } from "react-router";
 import DocumentTitle from 'react-document-title';
 import { selectFightNames, fetchFight } from './actions/actions.js';
 
@@ -13,13 +14,13 @@ const mapStateToProps = (state) => {
   };
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     dispatch,
     onFightSelected: (name1, name2, doPush = true) => {
       dispatch(fetchFight(name1, name2));
       if (doPush) {
-        //dispatch(push('/fight/' + name1 + "/" + name2));
+        ownProps.history.push('/fight/' + name1 + "/" + name2);
       }
     }
   }
@@ -77,8 +78,8 @@ class Fight extends React.Component {
   }
 }
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(Fight)
+)(Fight))
 

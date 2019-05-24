@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
 import './css/ag-grid.css';
 import './css/ag-theme-fresh.css';
-import { Badge } from 'react-bootstrap';
+import { Badge, Card } from 'react-bootstrap';
 import { formatPosition } from './utils.js';
 
 class NameTable extends Component {
@@ -36,10 +36,10 @@ class NameTable extends Component {
     return (
       <div className="row">
         <div className="col-md-12">
-          <div className="panel panel-primary">
-            <div className="panel-heading">
+          <Card>
+            <Card.Header>
               {info}
-              <Badge>Total {this.props.results.length}</Badge>
+              <Badge variant="light">Total {this.props.results.length}</Badge>
               <Badge>BOC {this.countEntries("British Long")}</Badge>
               <Badge>BSC {this.countEntries("British Sprint")}</Badge>
               <Badge>BMC {this.countEntries("British Middle")}</Badge>
@@ -47,8 +47,8 @@ class NameTable extends Component {
               <Badge>JKD1 {this.countEntries("JK Day 1")}</Badge>
               <Badge>JKD2 {this.countEntries("JK Day 2")}</Badge>
               <Badge>JKS {this.countEntries("JK Sprint")}</Badge>
-            </div>
-            <div className="panel-body ag-theme-fresh" style={{ height: "400px" }}>
+            </Card.Header>
+            <Card.Body className="ag-theme-fresh" style={{ height: "400px" }}>
               <AgGridReact
                 onGridReady={this.onGridReady.bind(this)}
                 onRowSelected={this.props.onRowSelected}
@@ -56,8 +56,8 @@ class NameTable extends Component {
                 columnDefs={columnDefs}
                 rowSelection="single"
               />
-            </div>
-          </div>
+            </Card.Body>
+          </Card>
         </div>
       </div>
     )

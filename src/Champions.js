@@ -2,6 +2,7 @@ import React from 'react';
 import ChampionTable from './ChampionTable';
 import DocumentTitle from 'react-document-title';
 import { connect } from 'react-redux';
+import { withRouter } from "react-router";
 import { selectEvent, fetchResults, selectName, fetchName } from './actions/actions.js';
 
 const mapStateToProps = (state) => {
@@ -10,7 +11,7 @@ const mapStateToProps = (state) => {
   };
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onCellClicked: (event) => {
       const column = event.column.colId;
@@ -22,13 +23,13 @@ const mapDispatchToProps = (dispatch) => {
         if (!/.*[(|/]/.test(name)) {
           dispatch(selectName(name));
           dispatch(fetchName(name));
-          //dispatch(push('/person/' + name));
+          ownProps.history.push('/person/' + name);
         }
       } else {
         const raceID = parseInt(event.data.RaceID, 10);
         dispatch(selectEvent(raceID));
         dispatch(fetchResults(raceID));
-        //dispatch(push('/event/' + raceID));
+        ownProps.history.push('/event/' + raceID);
       }
     }
   }
@@ -47,7 +48,7 @@ class Champions extends React.Component {
   }
 }
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(Champions)
+)(Champions))

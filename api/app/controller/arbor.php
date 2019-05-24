@@ -37,7 +37,6 @@ public function getEvent($f3) {
   }
   //echo '<pre>'; print_r($data); echo '</pre>';
   echo json_encode($data);
-  echo json_last_error_msg();
 }
 
 public function getName($f3) {
