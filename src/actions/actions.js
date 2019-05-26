@@ -69,42 +69,42 @@ export function filterClasses(filter) {
 }
 
 export const axiosConfig = {
-  headers: {'Accept': 'application/json'},
+  headers: { 'Accept': 'application/json' },
   baseURL: '/arbor/api'
 };
 
 export function fetchName(name) {
   return function (dispatch) {
     axios.get('/person/' + name, axiosConfig)
-    .then(json => {
-      dispatch(saveName(json.data));
-    });
+      .then(json => {
+        dispatch(saveName(json.data));
+      });
   }
 }
 
 export function fetchEvents() {
   return function (dispatch) {
     axios.get('/events', axiosConfig)
-    .then(json => {
-      dispatch(saveEvents(json.data));
-    });
+      .then(json => {
+        dispatch(saveEvents(json.data));
+      });
   }
 }
 
 export function fetchResults(raceID) {
   return function (dispatch) {
     axios.get('/event/' + raceID, axiosConfig)
-    .then(json => {
-      dispatch(saveResults(json.data));
-    });
+      .then(json => {
+        dispatch(saveResults(json.data));
+      });
   }
 }
 
 export function fetchFight(name1, name2) {
   return function (dispatch) {
     axios.get('/fight/' + name1 + '/' + name2, axiosConfig)
-    .then(json => {
-      dispatch(saveFightResults(json.data));
-    });
+      .then(json => {
+        dispatch(saveFightResults(json.data));
+      });
   }
 }

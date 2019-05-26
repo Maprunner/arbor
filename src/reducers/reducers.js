@@ -1,7 +1,8 @@
-import { SAVE_EVENTS, SELECT_EVENT, SAVE_RESULTS, SELECT_NAME, SAVE_NAME, FILTER_CLASSES,
-        SAVE_FIGHT_RESULTS, SELECT_FIGHT_NAMES } from '../actions/actions.js';
+import {
+  SAVE_EVENTS, SELECT_EVENT, SAVE_RESULTS, SELECT_NAME, SAVE_NAME, FILTER_CLASSES,
+  SAVE_FIGHT_RESULTS, SELECT_FIGHT_NAMES
+} from '../actions/actions.js';
 import { combineReducers } from 'redux';
-import { routerReducer } from 'react-router-redux';
 
 const initEvents = {
   eventData: [],
@@ -11,9 +12,9 @@ const initEvents = {
 }
 
 function getEventDetailsIndex(events, raceID) {
-  const idx = events.map(function(x){
+  const idx = events.map(function (x) {
     return parseInt(x.RaceID, 10);
-  }).indexOf(raceID);  
+  }).indexOf(raceID);
   return idx;
 }
 
@@ -30,10 +31,10 @@ function eventReducer(state = initEvents, action) {
       return Object.assign({}, state, {
         eventData: action.events,
         champions: action.champions,
-        currentEventDetails: currentDetails 
+        currentEventDetails: currentDetails
       })
     case SELECT_EVENT:
-      const idx = getEventDetailsIndex(state.eventData, action.raceID);
+      const idx = getEventDetailsIndex(state.eventData, parseInt(action.raceID, 10));
       return Object.assign({}, state, {
         currentRaceID: action.raceID,
         currentEventDetails: state.eventData.slice(idx, idx + 1)
@@ -74,7 +75,7 @@ const initResults = {
 function resultReducer(state = initResults, action) {
   switch (action.type) {
     case SAVE_RESULTS:
-      const classes = action.results.map(function(x) {
+      const classes = action.results.map(function (x) {
         return x.Class;
       });
       return ({
@@ -100,7 +101,7 @@ const initFight = {
 function fightReducer(state = initFight, action) {
   switch (action.type) {
     case SAVE_FIGHT_RESULTS:
-      action.fightResults.forEach(function(result) {
+      action.fightResults.forEach(function (result) {
         result.Position1 = parseInt(result.Position1, 10);
         result.Position2 = parseInt(result.Position2, 10);
       });
@@ -121,8 +122,7 @@ const reducers = combineReducers({
   events: eventReducer,
   results: resultReducer,
   name: nameReducer,
-  fight: fightReducer,
-  routing: routerReducer
+  fight: fightReducer
 })
 
 export default reducers

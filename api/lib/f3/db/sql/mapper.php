@@ -216,13 +216,15 @@ class Mapper extends \DB\Cursor {
 		$sql='SELECT '.$fields.' FROM '.$this->table;
 		if (isset($this->as))
 			$sql.=' AS '.$this->db->quotekey($this->as);
-		$args=[];
+    $args=[];
 		if (is_array($filter)) {
 			$args=isset($filter[1]) && is_array($filter[1])?
 				$filter[1]:
 				array_slice($filter,1,NULL,TRUE);
-			$args=is_array($args)?$args:[1=>$args];
-			list($filter)=$filter;
+      $args=is_array($args)?$args:[1=>$args];
+      if (count($filter) > 0) {
+        list($filter)=$filter;
+      }
 		}
 		if ($filter)
 			$sql.=' WHERE '.$filter;

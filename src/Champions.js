@@ -2,7 +2,7 @@ import React from 'react';
 import ChampionTable from './ChampionTable';
 import DocumentTitle from 'react-document-title';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux'
+import { withRouter } from "react-router";
 import { selectEvent, fetchResults, selectName, fetchName } from './actions/actions.js';
 
 const mapStateToProps = (state) => {
@@ -11,32 +11,32 @@ const mapStateToProps = (state) => {
   };
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onCellClicked: (event) => {
       const column = event.column.colId;
       if ((column === "M") || (column === "W")) {
-        const name = (column === "M" ? event.data.M: event.data.W);
+        const name = (column === "M" ? event.data.M : event.data.W);
         // don't try to load names with ( which shows a club abbreviation for a relay
         // or / which shows a joint winner which we can't easily deal with
         // regex is "name doesn't match some characters followed by ( or /"
         if (!/.*[(|/]/.test(name)) {
           dispatch(selectName(name));
           dispatch(fetchName(name));
-          dispatch(push('/person/' + name));
+          ownProps.history.push('/person/' + name);
         }
       } else {
         const raceID = parseInt(event.data.RaceID, 10);
         dispatch(selectEvent(raceID));
         dispatch(fetchResults(raceID));
-        dispatch(push('/event/' + raceID));
+        ownProps.history.push('/event/' + raceID);
       }
     }
   }
 }
 
-const Champions = React.createClass({
-  render: function() {
+class Champions extends React.Component {
+  render() {
     return (
       <DocumentTitle title="Arbor | Champions">
         <ChampionTable
@@ -46,9 +46,9 @@ const Champions = React.createClass({
       </DocumentTitle>
     )
   }
-})
+}
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(Champions)
+)(Champions))

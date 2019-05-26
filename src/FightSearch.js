@@ -1,27 +1,24 @@
 import React from 'react';
-import {AsyncTypeahead} from 'react-bootstrap-typeahead';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/css/bootstrap-theme.css';
+import PropTypes from 'prop-types';
+import { Card } from 'react-bootstrap';
+import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import axios from 'axios';
 import { axiosConfig } from './actions/actions.js';
 
-const FightSearch = React.createClass({
-  
-  getInitialState: function() {
-    return {
-      options: [],
-      name1: null,
-      name2: null
-    };
-  },
+class FightSearch extends React.Component {
+  state = {
+    options: [],
+    name1: null,
+    name2: null
+  }
 
-  render: function() {
+  render() {
     return (
       <div className="row">
         <div className="col-md-6">
-          <div className="panel panel-primary">
-            <div className="panel-heading">{this.props.caption}</div>
-            <div className="panel-body ag-fresh" style={{height: "50px", marginBottom: "10px"}}>
+          <Card>
+            <Card.Header className="bg-arbor text-white">{this.props.caption}</Card.Header>
+            <Card.Body className="ag-theme-fresh" style={{ height: "50px", marginBottom: "10px" }}>
               <AsyncTypeahead
                 ref="nameTypeAhead"
                 labelKey="Name"
@@ -35,13 +32,13 @@ const FightSearch = React.createClass({
                   <div><span>{option.Name}</span></div>
                 )}
               />
-            </div>
-          </div>
+            </Card.Body>
+          </Card>
         </div>
         <div className="col-md-6">
-          <div className="panel panel-primary">
-            <div className="panel-heading">{this.props.caption}</div>
-            <div className="panel-body ag-fresh" style={{height: "50px", marginBottom: "10px"}}>
+          <Card>
+            <Card.Header className="bg-arbor text-white">{this.props.caption}</Card.Header>
+            <Card.Body className="ag-theme-fresh" style={{ height: "50px", marginBottom: "10px" }}>
               <AsyncTypeahead
                 ref="nameTypeAhead"
                 labelKey="Name"
@@ -55,32 +52,32 @@ const FightSearch = React.createClass({
                   <div><span>{option.Name}</span></div>
                 )}
               />
-            </div>
-          </div>
+            </Card.Body>
+          </Card>
         </div>
-      </div>
+      </div >
     );
-  },
+  }
 
-  handleSearch: function(query) {
+  handleSearch(query) {
     // know we have at least 3 characters because of minLength property
     axios.get('/namesearch/' + query, axiosConfig)
       .then(json => {
-        this.setState({options: json.data});
-    });
-  },
+        this.setState({ options: json.data });
+      });
+  }
 
-  handleInput: function(input) {
+  handleInput(input) {
     // triggered when item selected from typeahead dropdown list
     if (input.length > 0) {
       this.props.onFightSelected(input[0].Name);
     }
   }
-})
+}
 
 NameSearch.propTypes = {
-  onFightSelected: React.PropTypes.func.isRequired,
-  caption: React.PropTypes.string.isRequired
+  onFightSelected: PropTypes.func.isRequired,
+  caption: PropTypes.string.isRequired
 };
 
 export default FightSearch;

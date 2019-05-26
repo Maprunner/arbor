@@ -4,6 +4,7 @@ class Import {
 
   private $db;
   private $id;
+  private $bofids;
   
 public static function importEvents($f3) {
   echo "Importing results<br>";
@@ -28,6 +29,55 @@ public static function importEvents($f3) {
   }
   
   $this->db->commit();
+}
+
+public static function tidy($f3) {
+  echo "Tidying results.<br>";
+
+  $s = $f3->get('SERVER');
+  if (strpos($s['SERVER_NAME'], 'localhost') === FALSE) {
+    echo "Only valid on localhost.<br>";
+    return;
+  }
+
+  $this->db = $f3->get("db.instance");
+  
+  // select unique BOFID name club combinations
+  $this->bofids = $this->db->exec("SELECT DISTINCT BOFID, lower(Name) as Name, lower(Club) as Club FROM result WHERE BOFID > 0 ORDER BY BOFID ASC");
+  
+  // do this as a single transaction: much faster and avoids the script timing out
+  $this->db->begin();
+  $this->tidyBOFID();
+  $this->db->commit();
+}
+
+private function tidyBOFID() {
+  // try to match missing BOFIDs
+  $result = new DB\SQL\Mapper($this->db,'result');
+ 
+  $result->load(array('BOFID = 0'));
+  while (!$result->dry()) {
+    $newid = $this->findBOFID(strtolower($result->Name), strtolower($result->Club));
+
+    if ($newid != 0) {
+      $result->BOFID = $newid;
+      $result->save();
+    }
+    $result->next();
+  }
+}
+
+private function findBOFID($name, $club) {
+  // match on name and club: as good as anything for now
+  foreach ($this->bofids as $id) {
+    if ($id["Club"] == $club) {
+      if ($id["Name"] == $name) {
+        echo "found BOFID ".$id["BOFID"]." for ".$id["Name"]."<br>";
+        return $id["BOFID"];
+      }
+    }
+  }
+  return 0;
 }
 
 private function importCSV($file) {

@@ -1,31 +1,32 @@
 import React from 'react';
-import {AsyncTypeahead} from 'react-bootstrap-typeahead';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/css/bootstrap-theme.css';
+import PropTypes from 'prop-types';
+import { Card } from 'react-bootstrap';
+import { AsyncTypeahead } from 'react-bootstrap-typeahead';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 import axios from 'axios';
 import { axiosConfig } from './actions/actions.js';
 
-const NameSearch = React.createClass({
-  
-  getInitialState: function() {
-    return {
-      options: [],
-    };
-  },
+class NameSearch extends React.Component {
+  state = {
+    options: [],
+    isLoading: false
+  }
 
-  render: function() {
+  render() {
     return (
       <div className="row">
-        <div className="col-md-12">
-          <div className="panel panel-primary">
-            <div className="panel-heading">{this.props.caption}</div>
-            <div className="panel-body ag-fresh" style={{height: "50px", marginBottom: "10px"}}>
+        <div className="col-md-12 mb-2">
+          <Card>
+            <Card.Header className="bg-arbor text-white">{this.props.caption}</Card.Header>
+            <Card.Body className="ag-theme-fresh" style={{ height: "50px", marginBottom: "20px" }}>
               <AsyncTypeahead
+                {...this.state}
                 ref="nameTypeAhead"
+                id="name-search"
                 labelKey="Name"
-                onSearch={this.handleSearch}
-                onChange={this.handleInput}
-                options={this.state.options}
+                onSearch={this.handleSearch.bind(this)}
+                onChange={this.handleInput.bind(this)}
+                {...this.state}
                 placeholder="Name search..."
                 caseSensitive={false}
                 minLength={3}
@@ -33,33 +34,34 @@ const NameSearch = React.createClass({
                   <div><span>{option.Name}</span></div>
                 )}
               />
-            </div>
-          </div>
+            </Card.Body>
+          </Card>
         </div>
       </div>
     );
-  },
+  }
 
-  handleSearch: function(query) {
+  handleSearch(query) {
     // know we have at least 3 characters because of minLength property
+    this.setState({ isLoading: true });
     axios.get('/namesearch/' + query, axiosConfig)
       .then(json => {
-        this.setState({options: json.data});
-    });
-  },
+        this.setState({ options: json.data, isLoading: false });
+      });
+  }
 
-  handleInput: function(input) {
+  handleInput(input) {
     // triggered when item selected from typeahead dropdown list, but user can
     // also edit it so need to check it is a valid name
     if (input.length > 0) {
       this.props.onNameSelected(input[0].Name);
     }
   }
-})
+}
 
 NameSearch.propTypes = {
-  onNameSelected: React.PropTypes.func.isRequired,
-  caption: React.PropTypes.string.isRequired
+  onNameSelected: PropTypes.func.isRequired,
+  caption: PropTypes.string.isRequired
 };
 
 export default NameSearch;
