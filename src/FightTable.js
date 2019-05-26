@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
+import { Card } from 'react-bootstrap';
 import './css/ag-grid.css';
 import './css/ag-theme-fresh.css';
 import { Badge } from 'react-bootstrap';
@@ -31,6 +32,7 @@ class FightTable extends Component {
       return event.Event === eventName ? total + 1 : total;
     }, 0);
   }
+
   render() {
     const columnDefs = [
       { headerName: 'RaceID', field: 'RaceID', hide: 'true' },
@@ -46,8 +48,13 @@ class FightTable extends Component {
       { headerName: 'Club', field: 'Club2', width: 75, cellClass: "center-text" },
       { headerName: 'Time', field: 'Time2', width: 75, cellClass: "center-text" },
       { headerName: 'Place', field: 'Position2', width: 65, cellClass: "center-text", cellRenderer: this.formatPosition },
-
     ];
+
+    const defaultColDef = {
+      sortable: true,
+      filter: true,
+    };
+
     const info = "Fight: " + (this.props.name1 || "Runner 1") + " v. " + (this.props.name2 || "Runner 2");
     let r1Wins;
     if (this.props.results.length === 0) {
@@ -70,24 +77,25 @@ class FightTable extends Component {
     return (
       <div className="row">
         <div className="col-md-12">
-          <div className="panel panel-primary">
-            <div className="panel-heading">
+          <Card className="mb-3">
+            <Card.Header className="bg-arbor text-white">
               {info}
-              <Badge>Played {this.props.results.length}</Badge>
-              <Badge>{this.props.name1} wins: {r1Wins}</Badge>
-              <Badge>{this.props.name2} wins: {r2Wins}</Badge>
-              <Badge>Draws: {draws}</Badge>
-            </div>
-            <div className="panel-body ag-theme-fresh" style={{ height: "500px" }}>
+              <Badge variant="light">Played {this.props.results.length}</Badge>
+              <Badge variant="light">{this.props.name1} Wins: {r1Wins}</Badge>
+              <Badge variant="light">{this.props.name2} Wins: {r2Wins}</Badge>
+              <Badge variant="light">Draws: {draws}</Badge>
+            </Card.Header>
+            <Card.Body className="ag-theme-fresh" style={{ height: "500px" }}>
               <AgGridReact
                 onGridReady={this.onGridReady.bind(this)}
-                onRowSelected={this.props.onRowSelected}
+                onRowSelected={this.props.onFightRowSelected}
                 rowData={this.props.results}
                 columnDefs={columnDefs}
+                defaultColDef={defaultColDef}
                 rowSelection="single"
               />
-            </div>
-          </div>
+            </Card.Body>
+          </Card>
         </div>
       </div>
     );

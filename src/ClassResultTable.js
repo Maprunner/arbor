@@ -17,6 +17,10 @@ class ClassResultTable extends Component {
       { headerName: 'Time', field: 'Time', width: 100, cellClass: "center-text" },
     ];
 
+    const defaultColDef = {
+      sortable: true,
+      filter: true,
+    };
 
     return (
       <div>
@@ -31,6 +35,7 @@ class ClassResultTable extends Component {
             rowData={this.props.resultData}
             onRowClicked={this.props.onNameSelected}
             columnDefs={columnDefs}
+            defaultColDef={defaultColDef}
           />
         </div>
       </div>

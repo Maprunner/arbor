@@ -1,4 +1,3 @@
-import React from 'react';
 import EventsTable from './EventsTable';
 import { connect } from 'react-redux';
 import { withRouter } from "react-router";
@@ -21,16 +20,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
 }
 
-class Events extends React.Component {
-  render() {
-    return <EventsTable
-      events={this.props.events}
-      onRowSelected={this.props.onRowSelected}
-    />;
-  }
-}
-
 export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(Events))
+)(EventsTable))

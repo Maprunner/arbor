@@ -16,9 +16,9 @@ const About = () => (
         <li><a href="https://github.com/reactjs/react-redux">React-redux</a></li>
         <li><a href="https://github.com/ReactTraining/react-router">React-router</a></li>
         <li><a href="http://getbootstrap.com/">Bootstrap</a></li>
+        <li><a href="https://react-bootstrap.github.io/">React Bootstrap</a></li>
         <li><a href="https://github.com/mzabriskie/axios">axios</a></li>
         <li><a href="https://www.ag-grid.com/">ag-grid</a></li>
-        <li><a href="https://github.com/ceolter/ag-grid-react">ag-grid-react</a></li>
       </ul>
     </span>
     <p>

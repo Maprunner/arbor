@@ -21,12 +21,18 @@ class NameTable extends Component {
       { headerName: 'Event', field: 'Event', width: 100 },
       { headerName: 'Year', field: 'Year', width: 75, cellClass: "center-text" },
       { headerName: 'Area', field: 'Area', width: 250 },
-      { headerName: 'Class', field: 'Class', width: 100, cellClass: "center-text" },
-      { headerName: 'Position', field: 'Position', width: 100, cellClass: "center-text", cellRenderer: formatPosition },
+      { headerName: 'Class', field: 'Class', width: 75, cellClass: "center-text" },
+      { headerName: 'Position', field: 'Position', width: 75, cellClass: "center-text", cellRenderer: formatPosition },
       { headerName: 'Name', field: 'Name', width: 200 },
       { headerName: 'Club', field: 'Club', width: 100, cellClass: "center-text" },
       { headerName: 'Time', field: 'Time', width: 100, cellClass: "center-text" },
     ];
+
+    const defaultColDef = {
+      sortable: true,
+      filter: true,
+    };
+
     let info;
     if (this.props.results.length === 0) {
       info = "Results";
@@ -36,17 +42,17 @@ class NameTable extends Component {
     return (
       <div className="row">
         <div className="col-md-12">
-          <Card>
-            <Card.Header>
+          <Card className="mb-3">
+            <Card.Header className="bg-arbor text-white">
               {info}
-              <Badge variant="light">Total {this.props.results.length}</Badge>
-              <Badge>BOC {this.countEntries("British Long")}</Badge>
-              <Badge>BSC {this.countEntries("British Sprint")}</Badge>
-              <Badge>BMC {this.countEntries("British Middle")}</Badge>
-              <Badge>BNC {this.countEntries("British Night")}</Badge>
-              <Badge>JKD1 {this.countEntries("JK Day 1")}</Badge>
-              <Badge>JKD2 {this.countEntries("JK Day 2")}</Badge>
-              <Badge>JKS {this.countEntries("JK Sprint")}</Badge>
+              <Badge pill variant="light">Total {this.props.results.length}</Badge>
+              <Badge variant="light">BOC {this.countEntries("British Long")}</Badge>
+              <Badge variant="light">BSC {this.countEntries("British Sprint")}</Badge>
+              <Badge variant="light">BMC {this.countEntries("British Middle")}</Badge>
+              <Badge variant="light">BNC {this.countEntries("British Night")}</Badge>
+              <Badge variant="light">JKD1 {this.countEntries("JK Day 1")}</Badge>
+              <Badge variant="light">JKD2 {this.countEntries("JK Day 2")}</Badge>
+              <Badge variant="light">JKS {this.countEntries("JK Sprint")}</Badge>
             </Card.Header>
             <Card.Body className="ag-theme-fresh" style={{ height: "400px" }}>
               <AgGridReact
@@ -54,6 +60,7 @@ class NameTable extends Component {
                 onRowSelected={this.props.onRowSelected}
                 rowData={this.props.results}
                 columnDefs={columnDefs}
+                defaultColDef={defaultColDef}
                 rowSelection="single"
               />
             </Card.Body>

@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Card } from 'react-bootstrap';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/css/bootstrap-theme.css';
 import axios from 'axios';
 import { axiosConfig } from './actions/actions.js';
 
@@ -17,9 +16,9 @@ class FightSearch extends React.Component {
     return (
       <div className="row">
         <div className="col-md-6">
-          <div className="panel panel-primary">
-            <div className="panel-heading">{this.props.caption}</div>
-            <div className="panel-body ag-theme-fresh" style={{ height: "50px", marginBottom: "10px" }}>
+          <Card>
+            <Card.Header className="bg-arbor text-white">{this.props.caption}</Card.Header>
+            <Card.Body className="ag-theme-fresh" style={{ height: "50px", marginBottom: "10px" }}>
               <AsyncTypeahead
                 ref="nameTypeAhead"
                 labelKey="Name"
@@ -33,13 +32,13 @@ class FightSearch extends React.Component {
                   <div><span>{option.Name}</span></div>
                 )}
               />
-            </div>
-          </div>
+            </Card.Body>
+          </Card>
         </div>
         <div className="col-md-6">
-          <div className="panel panel-primary">
-            <div className="panel-heading">{this.props.caption}</div>
-            <div className="panel-body ag-theme-fresh" style={{ height: "50px", marginBottom: "10px" }}>
+          <Card>
+            <Card.Header className="bg-arbor text-white">{this.props.caption}</Card.Header>
+            <Card.Body className="ag-theme-fresh" style={{ height: "50px", marginBottom: "10px" }}>
               <AsyncTypeahead
                 ref="nameTypeAhead"
                 labelKey="Name"
@@ -53,10 +52,10 @@ class FightSearch extends React.Component {
                   <div><span>{option.Name}</span></div>
                 )}
               />
-            </div>
-          </div>
+            </Card.Body>
+          </Card>
         </div>
-      </div>
+      </div >
     );
   }
 

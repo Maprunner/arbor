@@ -19,7 +19,7 @@ store.dispatch(fetchEvents());
 ReactDOM.render(
   <DocumentTitle title='Arbor'>
     <Provider store={store}>
-      <BrowserRouter>
+      <BrowserRouter basename="/arbor">
         <Page />
       </BrowserRouter>
     </Provider>

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ButtonToolbar from 'react-bootstrap/Button';
-import Button from 'react-bootstrap/Button';
+import { Button, ButtonToolbar } from 'react-bootstrap';
 
 class ClassFilter extends Component {
   onClickSingleClass(event) {
@@ -17,22 +16,29 @@ class ClassFilter extends Component {
     let classes = this.props.classes.map(function (name, index) {
       return (
         <Button
-          bsStyle="default"
+          className="m-1"
+          variant="outline-secondary"
           onClick={this.onClickSingleClass.bind(this, { name })}
           key={index}
-          className="btn btn-default">{name}</Button>
+          size="sm"
+        >
+          {name}
+        </Button>
       );
     }, this);
 
     return (
       <div>
         <ButtonToolbar>
-          {classes}
           <Button
-            bsStyle="success"
+            className="m-1"
+            variant="info"
             onClick={this.onClickAllClasses.bind(this, "All")}
-            className="btn btn-default">Show all
+            size="sm"
+          >
+            Show all
           </Button>
+          {classes}
         </ButtonToolbar>
       </div>
     );

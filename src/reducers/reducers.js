@@ -34,7 +34,7 @@ function eventReducer(state = initEvents, action) {
         currentEventDetails: currentDetails
       })
     case SELECT_EVENT:
-      const idx = getEventDetailsIndex(state.eventData, action.raceID);
+      const idx = getEventDetailsIndex(state.eventData, parseInt(action.raceID, 10));
       return Object.assign({}, state, {
         currentRaceID: action.raceID,
         currentEventDetails: state.eventData.slice(idx, idx + 1)

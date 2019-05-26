@@ -1,3 +1,24 @@
+# Maprunner Archive of British Orienteering Records (Arbor)
+
+The [Maprunner Archive of British Orienteering Records](https://www.maprunner.co.uk/arbor) (Arbor) includes results from all major British orienteering events dating back to around 2000. 
+
+In May 2017 it contains 118 events with over 167,000 individual results.
+
+The back end is written using the [Fat-Free php framework](https://fatfreeframework.com/3.6/home) with a SQLite database.
+
+The front end is based on [Create React App](https://github.com/facebookincubator/create-react-app) and uses amongst other things:
+
+* [React](https://facebook.github.io/react/)
+* [React-redux](https://github.com/reactjs/react-redux)
+* [React-router](https://github.com/ReactTraining/react-router)
+* [Bootstrap](http://getbootstrap.com/)
+* [axios](https://github.com/mzabriskie/axios)
+* [ag-grid](https://www.ag-grid.com/)
+* [ag-grid-react](https://github.com/ceolter/ag-grid-react)
+
+See the Wiki for details of how to import results for new events (in case I forget).
+
+## Create-react-app
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
@@ -26,43 +47,3 @@ The build is minified and the filenames include the hashes.<br>
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify

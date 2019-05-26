@@ -5,6 +5,10 @@
   box-shadow: 0 500px 0 500px #ddd;
 }
 
+.bg-arbor {
+  background-color: #337ab7;
+}
+
 .arbor-logo {
   padding: 10px 15px;
   width: 100%;

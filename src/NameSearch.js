@@ -15,17 +15,17 @@ class NameSearch extends React.Component {
   render() {
     return (
       <div className="row">
-        <div className="col-md-12">
+        <div className="col-md-12 mb-2">
           <Card>
-            <Card.Header>{this.props.caption}</Card.Header>
-            <Card.Body className="ag-theme-fresh" style={{ height: "50px", marginBottom: "10px" }}>
+            <Card.Header className="bg-arbor text-white">{this.props.caption}</Card.Header>
+            <Card.Body className="ag-theme-fresh" style={{ height: "50px", marginBottom: "20px" }}>
               <AsyncTypeahead
                 {...this.state}
                 ref="nameTypeAhead"
                 id="name-search"
                 labelKey="Name"
-                onSearch={this.handleSearch}
-                onChange={this.handleInput}
+                onSearch={this.handleSearch.bind(this)}
+                onChange={this.handleInput.bind(this)}
                 {...this.state}
                 placeholder="Name search..."
                 caseSensitive={false}

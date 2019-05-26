@@ -25,7 +25,7 @@ class EventSummaryTable extends Component {
           onGridReady={this.onGridReady.bind(this)}
           columnDefs={columnDefs}
         />
-      </div>
+      </div >
     );
   }
 
