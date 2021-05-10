@@ -227,7 +227,10 @@ class Mapper extends \DB\Cursor {
 				$filter[1]:
 				array_slice($filter,1,NULL,TRUE);
 			$args=is_array($args)?$args:[1=>$args];
-			list($filter)=$filter;
+      if (count($filter) > 0) {
+        $filter = $filter[0];
+      }
+			/* list($filter)=$filter; */
 		}
 		if ($filter)
 			$sql.=' WHERE '.$filter;
@@ -365,7 +368,7 @@ class Mapper extends \DB\Cursor {
 			$group_fields=array_flip(array_map('trim',explode(',',$group_string)));
 			foreach ($this->adhoc as $key=>$field)
 				// add adhoc fields that are used for grouping
-				if (isset($group_fields[$field]))
+				if (isset($group_fields[$key]))
 					$adhoc[]=$field['expr'].' AS '.$this->db->quotekey($key);
 			$fields=implode(',',$adhoc);
 			if (empty($fields))
@@ -378,6 +381,9 @@ class Mapper extends \DB\Cursor {
 			// for simple count just add a new adhoc counter
 			$fields='COUNT(*) AS '.$this->db->quotekey('_rows');
 		}
+		// no need to order for a count query as that could include virtual
+		// field references that are not present here
+		unset($options['order']);
 		list($sql,$args)=$this->stringify($fields,$filter,$options);
 		if ($subquery_mode)
 			$sql='SELECT COUNT(*) AS '.$this->db->quotekey('_rows').' '.
@@ -438,26 +444,30 @@ class Mapper extends \DB\Cursor {
 			// duplicate record
 			foreach ($this->fields as $key=>&$field) {
 				$field['changed']=true;
-				if ($field['pkey'] && !$inc && $field['pdo_type']==\PDO::PARAM_INT
-					&& !$field['nullable'])
+				if ($field['pkey'] && !$inc && ($field['auto_inc'] === TRUE ||
+						($field['auto_inc'] === NULL && !$field['nullable']
+							&& $field['pdo_type']==\PDO::PARAM_INT)
+				))
 					$inc=$key;
 				unset($field);
 			}
 		foreach ($this->fields as $key=>&$field) {
 			if ($field['pkey']) {
 				$field['previous']=$field['value'];
-				if (!$inc && $field['pdo_type']==\PDO::PARAM_INT &&
-					is_null($field['value']) && !$field['nullable'])
+				if (!$inc && empty($field['value']) &&
+					($field['auto_inc'] === TRUE || ($field['auto_inc'] === NULL
+						&& $field['pdo_type']==\PDO::PARAM_INT && !$field['nullable']))
+				)
 					$inc=$key;
 				$filter.=($filter?' AND ':'').$this->db->quotekey($key).'=?';
 				$nkeys[$nctr+1]=[$field['value'],$field['pdo_type']];
-				$nctr++;
+				++$nctr;
 			}
 			if ($field['changed'] && $key!=$inc) {
 				$fields.=($actr?',':'').$this->db->quotekey($key);
 				$values.=($actr?',':'').'?';
 				$args[$actr+1]=[$field['value'],$field['pdo_type']];
-				$actr++;
+				++$actr;
 				$ckeys[]=$key;
 			}
 			unset($field);
@@ -616,7 +626,7 @@ class Mapper extends \DB\Cursor {
 				$filter.=($filter?' AND ':'').$this->db->quotekey($key).'=?';
 				$args[$ctr+1]=[$field['previous'],$field['pdo_type']];
 				$pkeys[$key]=$field['previous'];
-				$ctr++;
+				++$ctr;
 			}
 			$field['value']=NULL;
 			$field['changed']=(bool)$field['default'];

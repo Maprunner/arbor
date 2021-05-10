@@ -62,7 +62,7 @@ class Web extends Prefab {
 					fclose($fhandle);
 				}
 				elseif (($response=$this->request($file,['method' => 'HEAD']))
-					&& preg_grep('/HTTP\/\d\.\d 200/',$response['headers'])
+					&& preg_grep('/HTTP\/[\d.]{1,3} 200/',$response['headers'])
 					&& ($type = preg_grep('/^Content-Type:/i',$response['headers']))) {
 					// get mime type directly from response header
 					return preg_replace('/^Content-Type:\s*/i','',array_pop($type));
@@ -230,7 +230,7 @@ class Web extends Prefab {
 				!$info['timed_out'] && !connection_aborted()) {
 				if ($kbps) {
 					// Throttle output
-					$ctr++;
+					++$ctr;
 					if ($ctr/$kbps>$elapsed=microtime(TRUE)-$start)
 						usleep(1e6*($ctr/$kbps-$elapsed));
 				}
@@ -383,9 +383,9 @@ class Web extends Prefab {
 		$body=ob_get_clean();
 		if (!$err &&
 			$options['follow_location'] && $open_basedir &&
-			preg_grep('/HTTP\/1\.\d 3\d{2}/',$headers) &&
+			preg_grep('/HTTP\/[\d.]{1,3} 3\d{2}/',$headers) &&
 			preg_match('/^Location: (.+)$/m',implode(PHP_EOL,$headers),$loc)) {
-			$options['max_redirects']--;
+			--$options['max_redirects'];
 			if($loc[1][0] == '/') {
 				$parts=parse_url($url);
 				$loc[1]=$parts['scheme'].'://'.$parts['host'].
@@ -530,10 +530,10 @@ class Web extends Prefab {
 						break;
 				}
 			if ($options['follow_location'] &&
-				preg_grep('/HTTP\/1\.\d 3\d{2}/',$headers) &&
+				preg_grep('/HTTP\/[\d.]{1,3} 3\d{2}/',$headers) &&
 				preg_match('/Location: (.+?)'.preg_quote($eol).'/',
 				$html[0],$loc)) {
-				$options['max_redirects']--;
+				--$options['max_redirects'];
 				return $this->request($loc[1],$options);
 			}
 		}
@@ -658,7 +658,7 @@ class Web extends Prefab {
 		}
 		$result=$this->{'_'.$this->wrapper}($url,$options);
 		if ($result && isset($cache)) {
-			if (preg_match('/HTTP\/1\.\d 304/',
+			if (preg_match('/HTTP\/[\d.]{1,3} 304/',
 				implode($eol,$result['headers']))) {
 				$result=$cache->get($hash);
 				$result['cached']=TRUE;
@@ -743,7 +743,7 @@ class Web extends Prefab {
 									// Presume it's a regex pattern
 									$regex=TRUE;
 									// Backtrack and validate
-									for ($ofs=$ptr;$ofs;$ofs--) {
+									for ($ofs=$ptr;$ofs;--$ofs) {
 										// Pattern should be preceded by
 										// open parenthesis, colon,
 										// object property or operator
@@ -751,13 +751,13 @@ class Web extends Prefab {
 											'/(return|[(:=!+\-*&|])$/',
 											substr($src,0,$ofs))) {
 											$data.='/';
-											$ptr++;
+											++$ptr;
 											while ($ptr<$len) {
 												$data.=$src[$ptr];
-												$ptr++;
+												++$ptr;
 												if ($src[$ptr-1]=='\\') {
 													$data.=$src[$ptr];
-													$ptr++;
+													++$ptr;
 												}
 												elseif ($src[$ptr-1]=='/')
 													break;
@@ -773,22 +773,22 @@ class Web extends Prefab {
 									if (!$regex) {
 										// Division operator
 										$data.=$src[$ptr];
-										$ptr++;
+										++$ptr;
 									}
 								}
 								continue;
 							}
-							if (in_array($src[$ptr],['\'','"'])) {
+							if (in_array($src[$ptr],['\'','"','`'])) {
 								$match=$src[$ptr];
 								$data.=$match;
-								$ptr++;
+								++$ptr;
 								// String literal
 								while ($ptr<$len) {
 									$data.=$src[$ptr];
-									$ptr++;
+									++$ptr;
 									if ($src[$ptr-1]=='\\') {
 										$data.=$src[$ptr];
-										$ptr++;
+										++$ptr;
 									}
 									elseif ($src[$ptr-1]==$match)
 										break;
@@ -804,11 +804,11 @@ class Web extends Prefab {
 									($ext[0]=='css' && $ptr+2<strlen($src) &&
 									preg_match('/:\w/',substr($src,$ptr+1,2))))
 									$data.=' ';
-								$ptr++;
+								++$ptr;
 								continue;
 							}
 							$data.=$src[$ptr];
-							$ptr++;
+							++$ptr;
 						}
 						if ($ext[0]=='css')
 							$data=str_replace(';}','}',$data);
@@ -842,7 +842,7 @@ class Web extends Prefab {
 		if (isset($xml->channel)) {
 			$out['source']=(string)$xml->channel->title;
 			$max=min($max,count($xml->channel->item));
-			for ($i=0;$i<$max;$i++) {
+			for ($i=0;$i<$max;++$i) {
 				$item=$xml->channel->item[$i];
 				$list=[''=>NULL]+$item->getnamespaces(TRUE);
 				$fields=[];
@@ -984,7 +984,7 @@ class Web extends Prefab {
 			'repudiandae rerum saepe sapiente sequi similique sint soluta '.
 			'suscipit tempora tenetur totam ut ullam unde vel veniam vero '.
 			'vitae voluptas');
-		for ($i=0,$add=$count-(int)$std;$i<$add;$i++) {
+		for ($i=0,$add=$count-(int)$std;$i<$add;++$i) {
 			shuffle($rnd);
 			$words=array_slice($rnd,0,mt_rand(3,$max));
 			$out.=(!$std&&$i==0?'':' ').ucfirst(implode(' ',$words)).'.';
