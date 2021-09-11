@@ -2,10 +2,10 @@
 
 class Arbor {
 
-public static function getEvents($f3) {
+public function getEvents($f3) {
   $db = $f3->get("db.instance");
   $raceTable = new DB\SQL\Mapper($db,'race');
-  $events = $raceTable->find(array(), array('order'=>'Event ASC, Year DESC'));
+  $events = $raceTable->find(array(), array('order'=>'Year DESC, Event ASC'));
   foreach ($events as &$record) {
     $record = $record->cast();
   }
@@ -72,6 +72,11 @@ public function getFight($f3) {
   $data = $db->exec($sql, array(':n1'=>$name1, ':n2'=>$name2));
   
   echo json_encode($data);
+}
+
+public function import($f3) {
+  $imp = new Import($f3);
+  $imp->importEvents($f3);
 }
   
 }
