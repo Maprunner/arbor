@@ -230,7 +230,7 @@ class Mapper extends \DB\Cursor {
       if (count($filter) > 0) {
         $filter = $filter[0];
       }
-			/* list($filter)=$filter; */
+			// list($filter)=$filter;
 		}
 		if ($filter)
 			$sql.=' WHERE '.$filter;
@@ -442,27 +442,45 @@ class Mapper extends \DB\Cursor {
 			return $this;
 		if ($this->valid())
 			// duplicate record
+			// foreach ($this->fields as $key=>&$field) {
+			// 	$field['changed']=true;
+			// 	if ($field['pkey'] && !$inc && ($field['auto_inc'] === TRUE ||
+			// 			($field['auto_inc'] === NULL && !$field['nullable']
+			// 				&& $field['pdo_type']==\PDO::PARAM_INT)
+			// 	))
+			// 		$inc=$key;
+			// 	unset($field);
+			// }
 			foreach ($this->fields as $key=>&$field) {
 				$field['changed']=true;
-				if ($field['pkey'] && !$inc && ($field['auto_inc'] === TRUE ||
-						($field['auto_inc'] === NULL && !$field['nullable']
-							&& $field['pdo_type']==\PDO::PARAM_INT)
-				))
+				if ($field['pkey'] && !$inc && $field['pdo_type']==\PDO::PARAM_INT
+					&& !$field['nullable'])
 					$inc=$key;
 				unset($field);
 			}
 		foreach ($this->fields as $key=>&$field) {
+			// if ($field['pkey']) {
+			// 	$field['previous']=$field['value'];
+			// 	if (!$inc && empty($field['value']) &&
+			// 		($field['auto_inc'] === TRUE || ($field['auto_inc'] === NULL
+			// 			&& $field['pdo_type']==\PDO::PARAM_INT && !$field['nullable']))
+			// 	)
+			// 		$inc=$key;
+			// 	$filter.=($filter?' AND ':'').$this->db->quotekey($key).'=?';
+			// 	$nkeys[$nctr+1]=[$field['value'],$field['pdo_type']];
+			// 	++$nctr;
+			// }
 			if ($field['pkey']) {
 				$field['previous']=$field['value'];
-				if (!$inc && empty($field['value']) &&
-					($field['auto_inc'] === TRUE || ($field['auto_inc'] === NULL
-						&& $field['pdo_type']==\PDO::PARAM_INT && !$field['nullable']))
-				)
+				if (!$inc && $field['pdo_type']==\PDO::PARAM_INT &&
+					is_null($field['value']) && !$field['nullable'])
 					$inc=$key;
 				$filter.=($filter?' AND ':'').$this->db->quotekey($key).'=?';
 				$nkeys[$nctr+1]=[$field['value'],$field['pdo_type']];
-				++$nctr;
+				$nctr++;
 			}
+
+
 			if ($field['changed'] && $key!=$inc) {
 				$fields.=($actr?',':'').$this->db->quotekey($key);
 				$values.=($actr?',':'').'?';

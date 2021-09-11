@@ -1,12 +1,18 @@
 <?php
 
+// 1. Manually edit arbor.db to add event record and allocate ID
+// 2. Create xml or csv file
+// 3. Check code to see it does what is needed for your file format, especially for CSV.
+// 4. start XAMPP server
+// 5. localhost/arbor/api/import/xxx/file_prefix
+
 class Import {
 
   private $db;
   private $id;
   private $bofids;
   
-public static function importEvents($f3) {
+public function importEvents($f3) {
   echo "Importing results<br>";
   $this->db = $f3->get("db.instance");
   
@@ -14,7 +20,6 @@ public static function importEvents($f3) {
   $this->db->begin();
   $this->id = $f3->get('PARAMS.raceid');
   echo "Event ID = ".$this->id."<br>";
-
   $file = $f3->get('PARAMS.file');
   echo "File = ".$file."<br>";
   
@@ -31,7 +36,7 @@ public static function importEvents($f3) {
   $this->db->commit();
 }
 
-public static function tidy($f3) {
+public function tidy($f3) {
   echo "Tidying results.<br>";
 
   $s = $f3->get('SERVER');
@@ -97,16 +102,18 @@ private function importCSV($file) {
   
   $oldClass = '';
   $runners = 0;
+  $classRunners = 0;
+  $classID = 0;
   
-  define('FIELD_COUNT', 6);
-  define('POS_IDX', 0);
-  define('FIRST_NAME_IDX', 1);
+  define('FIELD_COUNT', 7);
+  define('POS_IDX', 1);
+  define('FIRST_NAME_IDX', 2);
   //define('LAST_NAME_IDX', 3);
-  define('CLUB_IDX', 2);
-  define('CLASS_IDX', 3);
-  define('TIME_IDX', 4);
-  define('STATUS_IDX', 5);
-  define('LENGTH_IDX', 0);
+  define('CLUB_IDX', 3);
+  define('CLASS_IDX', 4);
+  define('TIME_IDX', 5);
+  define('STATUS_IDX', 6);
+  //define('LENGTH_IDX', 0);
 
   foreach ($lines as $line) {
     $r = explode(",", trim($line));
@@ -116,8 +123,9 @@ private function importCSV($file) {
       print_r($r);
       continue;
     }
+    // assumes that input is sorted by class
     if ($oldClass != $r[CLASS_IDX]) {
-      // update an existing class record if we have one
+      // update the existing class record if we have one
       if ($oldClass !== '') {
         $classTable->Runners = $classRunners;
         $classTable->save();
@@ -127,13 +135,13 @@ private function importCSV($file) {
       }
       // create new class record
       $classTable->reset();
-      $classTable->RaceID = $race->RaceID;
+      $classTable->RaceID = $this->id;
       $classTable->Class = $r[CLASS_IDX];
       //$classTable->Length = str_replace('km', '', $r[LENGTH_IDX]);
       $classTable->Length = 0;
       $classTable->Runners = 0;
       $classTable->save();
-      //echo "Save ".$r[CLASS_IDX]."<br>";
+      echo "Save ".$r[CLASS_IDX]."<br>";
    	  $classRunners = 0;
       $oldClass = $r[CLASS_IDX];
     }
@@ -201,7 +209,7 @@ private function importXMLV2($xml) {
       $classTable->Length = 0;
       $classTable->Runners = 0;
       $classTable->save();
-      echo "Save ".$class->ClassShortName."<br>";
+      echo "Save ".$class->ClassShortName."<br>".$race->RaceID."<br>";
       $newClass = false;
    	  $classRunners = 0;
     }
@@ -234,14 +242,14 @@ private function importXMLV2($xml) {
   		$result->Status = $this->getV2Status($personresult->Result->CompetitorStatus->attributes());
   		if ($result->Status != 'OK') $result->Position = 999;
       $result->save();
-      //echo 'Save '.$result->Name.'<br>';
+      echo 'Save '.$result->Name.'<br>';
 			$classRunners++;
     }
     // update class details
     $classTable->Length = $personresult->Result->CourseLength;
     $classTable->Runners = $classRunners;
     $classTable->save();
-    //echo 'Update '.$class->ClassShortName.'<br>';
+    // echo 'Update '.$class->ClassShortName.'<br>';
     echo $classRunners."  ".$class->ClassShortName." at ".date('H:i:s')."<br>";
     $newClass = true;
     $classes++;
