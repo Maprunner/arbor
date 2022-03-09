@@ -105,14 +105,14 @@ private function importCSV($file) {
   $classRunners = 0;
   $classID = 0;
   
-  define('FIELD_COUNT', 7);
-  define('POS_IDX', 1);
-  define('FIRST_NAME_IDX', 2);
+  define('FIELD_COUNT', 6);
+  define('POS_IDX', 0);
+  define('FIRST_NAME_IDX', 1);
   //define('LAST_NAME_IDX', 3);
-  define('CLUB_IDX', 3);
-  define('CLASS_IDX', 4);
-  define('TIME_IDX', 5);
-  define('STATUS_IDX', 6);
+  define('CLUB_IDX', 2);
+  define('CLASS_IDX', 3);
+  define('TIME_IDX', 4);
+  define('STATUS_IDX', 5);
   //define('LENGTH_IDX', 0);
 
   foreach ($lines as $line) {
@@ -174,6 +174,7 @@ private function importCSV($file) {
   $classTable->save();
   echo $classRunners."  ".$oldClass." at ".date('H:i:s')."<br>";
   // update race info
+  $runners = $runners + $classRunners;
   $race->Classes = $classes;
   $race->Runners = $runners;
   $race->save();
