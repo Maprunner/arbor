@@ -1,22 +1,21 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { useMemo } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import './css/ag-grid.css';
 import './css/ag-theme-fresh.css';
 import { Badge, Card } from 'react-bootstrap';
 import { formatPosition } from './utils.js';
 
-class NameTable extends Component {
+const NameTable = (props) => {
 
-  countEntries(eventName) {
-    const count = this.props.results.reduce(function (total, event) {
+  const countEntries = (eventName) => {
+    const count = props.results.reduce(function (total, event) {
       return event.Event === eventName ? total + 1 : total;
     }, 0);
     return count;
   }
 
-  render() {
-    const columnDefs = [
+  const columnDefs = useMemo(() => {
+    return [
       { headerName: 'RaceID', field: 'RaceID', hide: 'true' },
       { headerName: 'Event', field: 'Event', width: 100 },
       { headerName: 'Year', field: 'Year', width: 75, cellClass: "center-text" },
@@ -26,59 +25,58 @@ class NameTable extends Component {
       { headerName: 'Name', field: 'Name', width: 200 },
       { headerName: 'Club', field: 'Club', width: 100, cellClass: "center-text" },
       { headerName: 'Time', field: 'Time', width: 100, cellClass: "center-text" },
-    ];
+    ]
+  }, [])
 
-    const defaultColDef = {
-      sortable: true,
-      filter: true,
-    };
+  const defaultColDef = useMemo(() => {
+    return [
+      {
+        sortable: true,
+        filter: true,
+      },
+    ]
+  }, [])
 
-    let info;
-    if (this.props.results.length === 0) {
-      info = "Results";
-    } else {
-      info = "Results for " + this.props.name;
-    }
-    return (
-      <div className="row">
-        <div className="col-md-12">
-          <Card className="mb-3">
-            <Card.Header className="bg-arbor text-white">
-              {info}
-              <Badge pill variant="light">Total {this.props.results.length}</Badge>
-              <Badge variant="light">BOC {this.countEntries("British Long")}</Badge>
-              <Badge variant="light">BSC {this.countEntries("British Sprint")}</Badge>
-              <Badge variant="light">BMC {this.countEntries("British Middle")}</Badge>
-              <Badge variant="light">BNC {this.countEntries("British Night")}</Badge>
-              <Badge variant="light">JKD1 {this.countEntries("JK Day 1")}</Badge>
-              <Badge variant="light">JKD2 {this.countEntries("JK Day 2")}</Badge>
-              <Badge variant="light">JKS {this.countEntries("JK Sprint")}</Badge>
-            </Card.Header>
-            <Card.Body className="ag-theme-fresh" style={{ height: "400px" }}>
-              <AgGridReact
-                onGridReady={this.onGridReady.bind(this)}
-                onRowSelected={this.props.onRowSelected}
-                rowData={this.props.results}
-                columnDefs={columnDefs}
-                defaultColDef={defaultColDef}
-                rowSelection="single"
-              />
-            </Card.Body>
-          </Card>
-        </div>
-      </div>
-    )
-  }
-
-  onGridReady(props) {
+  const onGridReady = (props) => {
     props.api.sizeColumnsToFit();
   }
-}
 
-NameTable.propTypes = {
-  onRowSelected: PropTypes.func.isRequired,
-  results: PropTypes.array.isRequired,
-  name: PropTypes.string
-};
+  let info;
+  if (props.results.length === 0) {
+    info = "Results";
+  } else {
+    info = "Results for " + props.name;
+  }
+
+  return (
+    <div className="row">
+      <div className="col-md-12">
+        <Card className="mb-3">
+          <Card.Header className="bg-arbor text-white">
+            {info}
+            <Badge pill variant="light">Total {props.results.length}</Badge>
+            <Badge variant="light">BOC {countEntries("British Long")}</Badge>
+            <Badge variant="light">BSC {countEntries("British Sprint")}</Badge>
+            <Badge variant="light">BMC {countEntries("British Middle")}</Badge>
+            <Badge variant="light">BNC {countEntries("British Night")}</Badge>
+            <Badge variant="light">JKD1 {countEntries("JK Day 1")}</Badge>
+            <Badge variant="light">JKD2 {countEntries("JK Day 2")}</Badge>
+            <Badge variant="light">JKS {countEntries("JK Sprint")}</Badge>
+          </Card.Header>
+          <Card.Body className="ag-theme-fresh" style={{ height: "400px" }}>
+            <AgGridReact
+              onGridReady={onGridReady}
+              onRowSelected={props.onRowSelected}
+              rowData={props.results}
+              columnDefs={columnDefs}
+              defaultColDef={defaultColDef}
+              rowSelection="single"
+            />
+          </Card.Body>
+        </Card>
+      </div>
+    </div>
+  )
+}
 
 export default NameTable;
