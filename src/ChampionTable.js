@@ -1,36 +1,84 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { AgGridReact } from 'ag-grid-react';
-import { Card } from 'react-bootstrap';
-import './css/ag-grid.css';
-import './css/ag-theme-fresh.css';
+import React, { useMemo } from "react"
+import { useNavigate } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import DocumentTitle from "react-document-title"
+import { AgGridReact } from "ag-grid-react"
+import { Card } from "react-bootstrap"
+import "./css/ag-grid.css"
+import "./css/ag-theme-fresh.css"
+import {
+  selectEvent,
+  fetchResults,
+  selectName,
+  fetchName,
+} from "./actions/actions.js"
 
-const columnDefs = [
-  { headerName: 'RaceID', field: 'RaceID', hide: 'true' },
-  { headerName: 'Event', field: 'Event', width: 120 },
-  { headerName: 'Year', field: 'Year', width: 75, cellClass: "center-text" },
-  { headerName: 'Area', field: 'Area', width: 225 },
-  { headerName: 'Assoc', field: 'Association', width: 75, cellClass: "center-text" },
-  { headerName: 'Men', field: 'M', width: 275 },
-  { headerName: 'Women', field: 'W', width: 275 }
-];
+const ChampionTable = () => {
+  const champions = useSelector((state) => state.events.champions)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-const defaultColDef = {
-  sortable: true,
-  filter: true,
-};
+  const onCellClicked = (event) => {
+    const column = event.column.colId
+    if (column === "M" || column === "W") {
+      const name = column === "M" ? event.data.M : event.data.W
+      // don't try to load names with ( which shows a club abbreviation for a relay
+      // or / which shows a joint winner which we can't easily deal with
+      // regex is "name doesn't match some characters followed by ( or /"
+      if (!/.*[(|/]/.test(name)) {
+        dispatch(selectName(name))
+        dispatch(fetchName(name))
+        navigate("/person/" + name)
+      }
+    } else {
+      const raceID = parseInt(event.data.RaceID, 10)
+      dispatch(selectEvent(raceID))
+      dispatch(fetchResults(raceID))
+      navigate("/event/" + raceID)
+    }
+  }
 
-class ChampionTable extends Component {
-  render() {
-    return (
+  const columnDefs = useMemo(() => {
+    return [
+      { headerName: "RaceID", field: "RaceID", hide: "true" },
+      { headerName: "Event", field: "Event", width: 120 },
+      {
+        headerName: "Year",
+        field: "Year",
+        width: 75,
+        cellClass: "center-text",
+      },
+      { headerName: "Area", field: "Area", width: 225 },
+      {
+        headerName: "Assoc",
+        field: "Association",
+        width: 75,
+        cellClass: "center-text",
+      },
+      { headerName: "Men", field: "M", width: 275 },
+      { headerName: "Women", field: "W", width: 275 },
+    ]
+  }, [])
+
+  const defaultColDef = useMemo(() => {
+    return [
+      {
+        sortable: true,
+        filter: true,
+      },
+    ]
+  }, [])
+
+  return (
+    <DocumentTitle title="Arbor | Champions">
       <div className="row">
         <div className="col-md-12">
           <Card className="mb-3">
             <Card.Header className="bg-arbor text-white">Champions</Card.Header>
             <Card.Body className="ag-theme-fresh" style={{ height: "400px" }}>
               <AgGridReact
-                rowData={this.props.champions}
-                onCellClicked={this.props.onCellClicked}
+                rowData={champions}
+                onCellClicked={(event) => onCellClicked(event)}
                 columnDefs={columnDefs}
                 defaultColDef={defaultColDef}
                 rowSelection="single"
@@ -39,13 +87,8 @@ class ChampionTable extends Component {
           </Card>
         </div>
       </div>
-    );
-  }
+    </DocumentTitle>
+  )
 }
 
-ChampionTable.propTypes = {
-  onCellClicked: PropTypes.func.isRequired,
-  champions: PropTypes.array.isRequired
-};
-
-export default ChampionTable;
+export default ChampionTable

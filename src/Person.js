@@ -1,70 +1,59 @@
-import React from 'react';
-import NameTable from './NameTable';
-import NameSearch from './NameSearch';
-import { connect } from 'react-redux';
-import { withRouter } from "react-router";
-import DocumentTitle from 'react-document-title';
-import { selectEvent, fetchResults, selectName, fetchName } from './actions/actions.js';
+import React, { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { useLocation, useNavigate } from "react-router-dom"
+import NameTable from "./NameTable"
+import NameSearch from "./NameSearch"
+import DocumentTitle from "react-document-title"
+import {
+  selectEvent,
+  fetchResults,
+  selectName,
+  fetchName,
+} from "./actions/actions.js"
 
-const mapStateToProps = (state) => {
-  return {
-    name: state.name.name,
-    results: state.name.results
-  };
-}
+const Person = () => {
+  const name = useSelector((state) => state.name.name)
+  const results = useSelector((state) => state.name.results)
+  const dispatch = useDispatch()
+  const location = useLocation()
+  const navigate = useNavigate()
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    onRowSelected: (event) => {
-      const raceID = parseInt(event.node.data.RaceID, 10);
-      dispatch(selectEvent(raceID));
-      dispatch(fetchResults(raceID));
-      ownProps.history.push('/event/' + raceID);
-    },
-    onNameSelected: (name, doPush = true) => {
-      dispatch(selectName(name));
-      dispatch(fetchName(name));
-      if (doPush) {
-        ownProps.history.push('/person/' + name);
-      }
-    }
-  }
-}
-
-class Person extends React.Component {
-  componentDidMount() {
-    if (this.props.name === null) {
+  useEffect(() => {
+    if (name === null) {
       // check for deep link to a particular name that needs to be loaded
       // location.pathname is e.g. '/person/Simon%20Errington'
-      const bits = this.props.location.pathname.split("/");
+      const bits = location.pathname.split("/")
       if (bits.length === 3) {
-        const name = bits[2].replace("%20", " ");
-        this.props.onNameSelected(name, false);
+        const name = bits[2].replace("%20", " ")
+        onNameSelected(name, false)
       }
+    }
+  })
+
+  const onRowSelected = (event) => {
+    const raceID = parseInt(event.node.data.RaceID, 10)
+    dispatch(selectEvent(raceID))
+    dispatch(fetchResults(raceID))
+    navigate("/event/" + raceID)
+  }
+
+  const onNameSelected = (name, doPush = true) => {
+    dispatch(selectName(name))
+    dispatch(fetchName(name))
+    if (doPush) {
+      navigate("/person/" + name)
     }
   }
 
-  render() {
-    const title = (this.props.name || " Arbor | Name search");
-    return (
-      <div>
-        <DocumentTitle title={title}>
-          <NameSearch
-            onNameSelected={this.props.onNameSelected}
-            caption="Name search"
-          />
-        </DocumentTitle>
-        <NameTable
-          name={this.props.name}
-          results={this.props.results}
-          onRowSelected={this.props.onRowSelected}
-        />
-      </div>
-    )
-  }
+  const title = name || " Arbor | Name search"
+  return (
+    <div>
+      <DocumentTitle title={title}>
+        <NameSearch onNameSelected={onNameSelected} caption="Name search" />
+      </DocumentTitle>
+      <NameTable name={name} results={results} onRowSelected={onRowSelected} />
+    </div>
+  )
 }
 
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Person))
+export default Person
