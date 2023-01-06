@@ -1,15 +1,11 @@
-import React from 'react';
-import DocumentTitle from 'react-document-title';
-import About from './About';
+import React, { useEffect } from "react"
+import About from "./About"
 
-class AboutPage extends React.Component {
-  render() {
-    return (
-      <DocumentTitle title="Arbor | About">
-        <About />
-      </DocumentTitle>
-    );
-  }
+const AboutPage = () => {
+  useEffect(() => {
+    document.title = "Arbor | About"
+  }, [])
+  return <About />
 }
 
-export default AboutPage;
+export default AboutPage
