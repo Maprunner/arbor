@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux"
 import { useLocation, useNavigate } from "react-router-dom"
 import NameTable from "./NameTable"
 import NameSearch from "./NameSearch"
-import DocumentTitle from "react-document-title"
 import {
   selectEvent,
   fetchResults,
@@ -45,12 +44,13 @@ const Person = () => {
     }
   }
 
-  const title = name || " Arbor | Name search"
+  useEffect(() => {
+    document.title = `Arbor | ${name}` || "Arbor | Name search"
+  }, [name])
+
   return (
     <div>
-      <DocumentTitle title={title}>
-        <NameSearch onNameSelected={onNameSelected} caption="Name search" />
-      </DocumentTitle>
+      <NameSearch onNameSelected={onNameSelected} caption="Name search" />
       <NameTable name={name} results={results} onRowSelected={onRowSelected} />
     </div>
   )

@@ -1,51 +1,74 @@
-import React, { useMemo } from 'react';
-import { AgGridReact } from 'ag-grid-react';
-import './css/ag-grid.css';
-import './css/ag-theme-fresh.css';
-import { Badge, Card } from 'react-bootstrap';
-import { formatPosition } from './utils.js';
+import React, { useMemo } from "react"
+import { AgGridReact } from "ag-grid-react"
+import "./css/ag-grid.css"
+import "./css/ag-theme-fresh.css"
+import { Badge, Card } from "react-bootstrap"
+import { formatPosition } from "./utils.js"
 
 const NameTable = (props) => {
-
   const countEntries = (eventName) => {
     const count = props.results.reduce(function (total, event) {
-      return event.Event === eventName ? total + 1 : total;
-    }, 0);
-    return count;
+      return event.Event === eventName ? total + 1 : total
+    }, 0)
+    return count
   }
 
   const columnDefs = useMemo(() => {
     return [
-      { headerName: 'RaceID', field: 'RaceID', hide: 'true' },
-      { headerName: 'Event', field: 'Event', width: 100 },
-      { headerName: 'Year', field: 'Year', width: 75, cellClass: "center-text" },
-      { headerName: 'Area', field: 'Area', width: 250 },
-      { headerName: 'Class', field: 'Class', width: 75, cellClass: "center-text" },
-      { headerName: 'Position', field: 'Position', width: 75, cellClass: "center-text", cellRenderer: formatPosition },
-      { headerName: 'Name', field: 'Name', width: 200 },
-      { headerName: 'Club', field: 'Club', width: 100, cellClass: "center-text" },
-      { headerName: 'Time', field: 'Time', width: 100, cellClass: "center-text" },
-    ]
-  }, [])
-
-  const defaultColDef = useMemo(() => {
-    return [
+      { headerName: "RaceID", field: "RaceID", hide: "true" },
+      { headerName: "Event", field: "Event", width: 100 },
       {
-        sortable: true,
-        filter: true,
+        headerName: "Year",
+        field: "Year",
+        width: 75,
+        cellClass: "center-text",
+      },
+      { headerName: "Area", field: "Area", width: 250 },
+      {
+        headerName: "Class",
+        field: "Class",
+        width: 75,
+        cellClass: "center-text",
+      },
+      {
+        headerName: "Position",
+        field: "Position",
+        width: 75,
+        cellClass: "center-text",
+        cellRenderer: formatPosition,
+      },
+      { headerName: "Name", field: "Name", width: 200 },
+      {
+        headerName: "Club",
+        field: "Club",
+        width: 100,
+        cellClass: "center-text",
+      },
+      {
+        headerName: "Time",
+        field: "Time",
+        width: 100,
+        cellClass: "center-text",
       },
     ]
   }, [])
 
+  const defaultColDef = useMemo(() => {
+    return {
+      sortable: true,
+      filter: true,
+    }
+  }, [])
+
   const onGridReady = (props) => {
-    props.api.sizeColumnsToFit();
+    props.api.sizeColumnsToFit()
   }
 
-  let info;
+  let info
   if (props.results.length === 0) {
-    info = "Results";
+    info = "Results"
   } else {
-    info = "Results for " + props.name;
+    info = "Results for " + props.name
   }
 
   return (
@@ -54,7 +77,9 @@ const NameTable = (props) => {
         <Card className="mb-3">
           <Card.Header className="bg-arbor text-white">
             {info}
-            <Badge pill variant="light">Total {props.results.length}</Badge>
+            <Badge pill variant="light">
+              Total {props.results.length}
+            </Badge>
             <Badge variant="light">BOC {countEntries("British Long")}</Badge>
             <Badge variant="light">BSC {countEntries("British Sprint")}</Badge>
             <Badge variant="light">BMC {countEntries("British Middle")}</Badge>
@@ -79,4 +104,4 @@ const NameTable = (props) => {
   )
 }
 
-export default NameTable;
+export default NameTable

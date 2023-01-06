@@ -10,6 +10,19 @@ import {
 } from "../actions/actions.js"
 import { combineReducers } from "redux"
 
+const tidyTime = (result) => {
+  if (result.Time) {
+    // convert hh:mm:ss to mmm:ss
+    const fields = result.Time.split(":")
+    if (fields.length === 3) {
+      const hours = parseInt(fields[0], 10)
+      const minutes = parseInt(fields[1], 10)
+      result.Time = `${60 * hours + minutes}:${fields[2]}`
+    }
+  }
+  return result
+}
+
 const initEvents = {
   eventData: [],
   currentRaceID: null,
@@ -68,6 +81,7 @@ function nameReducer(state = initName, action) {
         results: [],
       }
     case SAVE_NAME:
+      action.results.map((result) => tidyTime(result))
       return {
         name: state.name,
         results: action.results,
@@ -89,6 +103,8 @@ function resultReducer(state = initResults, action) {
       const classes = action.results.map(function (x) {
         return x.Class
       })
+      action.results.map((result) => tidyTime(result))
+
       return {
         results: action.results,
         classes: [...new Set(classes)],

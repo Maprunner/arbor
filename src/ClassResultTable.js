@@ -38,12 +38,10 @@ const ClassResultTable = (props) => {
   }, [])
 
   const defaultColDef = useMemo(() => {
-    return [
-      {
-        sortable: true,
-        filter: true,
-      },
-    ]
+    return {
+      sortable: true,
+      filter: true,
+    }
   }, [])
 
   return (

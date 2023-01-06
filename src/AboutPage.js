@@ -1,13 +1,11 @@
-import React from "react"
-import DocumentTitle from "react-document-title"
+import React, { useEffect } from "react"
 import About from "./About"
 
 const AboutPage = () => {
-  return (
-    <DocumentTitle title="Arbor | About">
-      <About />
-    </DocumentTitle>
-  )
+  useEffect(() => {
+    document.title = "Arbor | About"
+  }, [])
+  return <About />
 }
 
 export default AboutPage

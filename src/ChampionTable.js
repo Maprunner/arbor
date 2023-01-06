@@ -1,7 +1,6 @@
-import React, { useMemo } from "react"
+import React, { useEffect, useMemo } from "react"
 import { useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import DocumentTitle from "react-document-title"
 import { AgGridReact } from "ag-grid-react"
 import { Card } from "react-bootstrap"
 import "./css/ag-grid.css"
@@ -61,33 +60,33 @@ const ChampionTable = () => {
   }, [])
 
   const defaultColDef = useMemo(() => {
-    return [
-      {
-        sortable: true,
-        filter: true,
-      },
-    ]
+    return {
+      sortable: true,
+      filter: true,
+    }
+  }, [])
+
+  useEffect(() => {
+    document.title = "Arbor | Champions"
   }, [])
 
   return (
-    <DocumentTitle title="Arbor | Champions">
-      <div className="row">
-        <div className="col-md-12">
-          <Card className="mb-3">
-            <Card.Header className="bg-arbor text-white">Champions</Card.Header>
-            <Card.Body className="ag-theme-fresh" style={{ height: "400px" }}>
-              <AgGridReact
-                rowData={champions}
-                onCellClicked={(event) => onCellClicked(event)}
-                columnDefs={columnDefs}
-                defaultColDef={defaultColDef}
-                rowSelection="single"
-              />
-            </Card.Body>
-          </Card>
-        </div>
+    <div className="row">
+      <div className="col-md-12">
+        <Card className="mb-3">
+          <Card.Header className="bg-arbor text-white">Champions</Card.Header>
+          <Card.Body className="ag-theme-fresh" style={{ height: "400px" }}>
+            <AgGridReact
+              rowData={champions}
+              onCellClicked={(event) => onCellClicked(event)}
+              columnDefs={columnDefs}
+              defaultColDef={defaultColDef}
+              rowSelection="single"
+            />
+          </Card.Body>
+        </Card>
       </div>
-    </DocumentTitle>
+    </div>
   )
 }
 

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { useEffect, useMemo } from "react"
 import { AgGridReact } from "ag-grid-react"
 import { Card } from "react-bootstrap"
 import { useDispatch, useSelector } from "react-redux"
@@ -62,7 +62,6 @@ const EventsTable = () => {
         headerName: "Area",
         field: "Area",
         width: 250,
-        //cellRenderer: this.formatArea,
       },
       {
         headerName: "Link",
@@ -82,12 +81,14 @@ const EventsTable = () => {
   }, [])
 
   const defaultColDef = useMemo(() => {
-    return [
-      {
-        sortable: true,
-        filter: true,
-      },
-    ]
+    return {
+      sortable: true,
+      filter: true,
+    }
+  }, [])
+
+  useEffect(() => {
+    document.title = "Arbor"
   }, [])
 
   return (

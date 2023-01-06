@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom"
 import EventSummaryTable from "./EventSummaryTable"
 import ClassResultTable from "./ClassResultTable"
 import { Card } from "react-bootstrap"
-import DocumentTitle from "react-document-title"
 import { getEventAbbreviation } from "./utils.js"
 import {
   selectEvent,
@@ -58,8 +57,10 @@ const SingleEventTable = () => {
     dispatch(fetchResults(raceID))
   }
 
-  const title =
-    getEventAbbreviation(currentEventDetails) || "Arbor | Event results"
+  useEffect(() => {
+    document.title =
+      getEventAbbreviation(currentEventDetails) || "Arbor | Event results"
+  }, [currentEventDetails])
 
   return (
     <div className="row">
@@ -69,9 +70,7 @@ const SingleEventTable = () => {
             Event Summary
           </Card.Header>
           <Card.Body className="ag-theme-fresh">
-            <DocumentTitle title={title}>
-              <EventSummaryTable rowData={currentEventDetails} />
-            </DocumentTitle>
+            <EventSummaryTable rowData={currentEventDetails} />
           </Card.Body>
         </Card>
         <Card className="mb-3">

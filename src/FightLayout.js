@@ -1,7 +1,6 @@
 import React, { useEffect } from "react"
 import FightTable from "./FightTable"
 import NameSearch from "./NameSearch"
-import DocumentTitle from "react-document-title"
 import {
   fetchFight,
   fetchResults,
@@ -58,11 +57,13 @@ const FightLayout = () => {
     }
   }
 
+  useEffect(() => {
+    document.title = "Arbor | Fight"
+  }, [])
+
   return (
     <div>
-      <DocumentTitle title="Arbor | Fight">
-        <NameSearch onNameSelected={onName1Selected} caption="Runner 1" />
-      </DocumentTitle>
+      <NameSearch onNameSelected={onName1Selected} caption="Runner 1" />
       <NameSearch onNameSelected={onName2Selected} caption="Runner 2" />
       <FightTable
         name1={name1}
