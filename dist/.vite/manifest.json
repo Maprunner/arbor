@@ -1,0 +1,23 @@
+{
+  "index.html": {
+    "file": "assets/index-Brqwyf1r.js",
+    "name": "index",
+    "src": "index.html",
+    "isEntry": true,
+    "css": [
+      "assets/index-B8UjXexJ.css"
+    ],
+    "assets": [
+      "assets/arborbanner-D_XDoU3j.jpg",
+      "assets/boctrophies-urw5qFp0.jpg"
+    ]
+  },
+  "src/img/arborbanner.jpg": {
+    "file": "assets/arborbanner-D_XDoU3j.jpg",
+    "src": "src/img/arborbanner.jpg"
+  },
+  "src/img/boctrophies.jpg": {
+    "file": "assets/boctrophies-urw5qFp0.jpg",
+    "src": "src/img/boctrophies.jpg"
+  }
+}
