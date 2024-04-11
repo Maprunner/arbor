@@ -70,7 +70,8 @@ export function filterClasses(filter) {
 
 export const axiosConfig = {
   headers: { Accept: "application/json" },
-  baseURL: "/arbor/api",
+  // API depends on if we are in development or production
+  baseURL: import.meta.env.PROD ? "/arbor/api" : "/api",
 }
 
 export function fetchName(name) {

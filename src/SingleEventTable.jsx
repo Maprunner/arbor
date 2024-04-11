@@ -1,4 +1,5 @@
 import React, { useEffect } from "react"
+import { createSelector } from "@reduxjs/toolkit"
 import { useDispatch, useSelector } from "react-redux"
 import { useLocation, useNavigate } from "react-router-dom"
 import EventSummaryTable from "./EventSummaryTable"
@@ -33,11 +34,19 @@ const SingleEventTable = () => {
   )
   const currentRaceID = useSelector((state) => state.events.currentRaceID)
 
-  const resultData = useSelector((state) =>
-    state.results.results.filter(function (result) {
-      return state.results.filteredClasses.indexOf(result.Class) !== -1
-    })
+  const selectResults = (state) => state.results.results
+  const selectFilteredClasses = (state) => state.results.filteredClasses
+
+  const memoizedResultData = createSelector(
+    [selectResults, selectFilteredClasses],
+    (results, filteredClasses) => {
+      return results.filter(function (result) {
+        return filteredClasses.indexOf(result.Class) !== -1
+      })
+    }
   )
+
+  const resultData = useSelector(memoizedResultData)
 
   const classData = useSelector((state) => state.results.classes)
 

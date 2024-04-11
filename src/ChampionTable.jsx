@@ -18,22 +18,25 @@ const ChampionTable = () => {
   const navigate = useNavigate()
 
   const onCellClicked = (event) => {
-    const column = event.column.colId
-    if (column === "M" || column === "W") {
-      const name = column === "M" ? event.data.M : event.data.W
-      // don't try to load names with ( which shows a club abbreviation for a relay
-      // or / which shows a joint winner which we can't easily deal with
-      // regex is "name doesn't match some characters followed by ( or /"
-      if (!/.*[(|/]/.test(name)) {
-        dispatch(selectName(name))
-        dispatch(fetchName(name))
-        navigate("/person/" + name)
+    const raceID = parseInt(event.data.RaceID, 10)
+    // raceIDs over 10000 are relays amd other event types that don't have individual results so just ignore the click
+    if (raceID < 10000) {
+      const column = event.column.colId
+      if (column === "M" || column === "W") {
+        const name = column === "M" ? event.data.M : event.data.W
+        // don't try to load names with ( which shows a club abbreviation for a relay
+        // or / which shows a joint winner which we can't easily deal with
+        // regex is "name doesn't match some characters followed by ( or /"
+        if (!/.*[(|/]/.test(name)) {
+          dispatch(selectName(name))
+          dispatch(fetchName(name))
+          navigate("/person/" + name)
+        }
+      } else {
+        dispatch(selectEvent(raceID))
+        dispatch(fetchResults(raceID))
+        navigate("/event/" + raceID)
       }
-    } else {
-      const raceID = parseInt(event.data.RaceID, 10)
-      dispatch(selectEvent(raceID))
-      dispatch(fetchResults(raceID))
-      navigate("/event/" + raceID)
     }
   }
 
