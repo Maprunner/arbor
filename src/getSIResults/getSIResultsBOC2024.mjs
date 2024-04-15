@@ -1,5 +1,6 @@
 // run: node getSIResults.mjs
 // loops through all classes and donwloads results data
+// this version assumes all results are in getData function included as script in HTML
 // creates CSV for import to Arbor
 
 import fetch from "node-fetch"
@@ -19,20 +20,9 @@ const classList = classes.split(",")
 
 let runners = []
 
-async function getClass(url, c, urlbase) {
-  await fetch(url)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`)
-      }
-      return response.text()
-    })
-    .then((data) => {
-      // Assuming the fetched data is in a valid JSON format
-      try {
-        const jsonData = JSON.parse(data)
-
-        jsonData.data.forEach((row) => {
+function getClass(url, c, index) {
+  let data = getData(index)
+data.forEach((row) => {
           let runner = {}
           // just take digits from position field
           // converts 1st to 1 and covers various dsq/mp possibilities
@@ -42,25 +32,18 @@ async function getClass(url, c, urlbase) {
           }
           // strip HTML from mp/dsq/Strava links etc
           runner.name = row[3].replace(/<[^>]+>|&[^;]+;/g, "")
-          runner.time = row[7].replace(/<[^>]+>|&[^;]+;/g, "")
+          runner.time = row[6].replace(/<[^>]+>|&[^;]+;/g, "")
           runner.club = row[4].replace(/<[^>]+>|&[^;]+;/g, "")
           runner.class = c
           runners.push(runner)
         })
-      } catch (parseError) {
-        console.error("Error parsing fetched data as JSON:", parseError)
-      }
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error)
-    })
-}
+  }
 
 let index = -1
 for (let c of classList) {
   index = index + 1
   const url = urlbase + index.toString() + ".txt"
-  await getClass(url, c)
+  getClass(url, c, index)
 }
 
 let text = ""
@@ -85,3 +68,5 @@ fs.writeFile(outputFilePath, text, (err) => {
     console.log(`Result saved as ${outputFilePath}`)
   }
 })
+
+// paste in function getData(tableNumber) from script in <head> here

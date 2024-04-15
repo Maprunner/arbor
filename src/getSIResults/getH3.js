@@ -5,7 +5,8 @@
 const https = require("https")
 const fs = require("fs")
 
-const url = "https://www.sportident.co.uk/results/JK/2024/Day3/"
+const url =
+  "https://www.mdoc.org.uk/results-archive/2024/2024-04-13-BOC_2024/index.html"
 const outputFilePath = "h3_items.txt"
 
 https

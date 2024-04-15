@@ -1,7 +1,7 @@
 <?php
 
 // 1. Manually edit arbor.db to add event record and allocate ID
-// 2. Create xml or csv file
+// 2. Create xml or csv file in data file
 // 3. Check code to see it does what is needed for your file format, especially for CSV.
 // 4. start XAMPP server
 // 5. localhost/arbor/api/import/xxx/file_prefix
