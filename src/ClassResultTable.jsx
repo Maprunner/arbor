@@ -11,27 +11,23 @@ const ClassResultTable = (props) => {
       {
         headerName: "Class",
         field: "Class",
-        width: 100,
         cellClass: "center-text",
       },
       {
         headerName: "Position",
         field: "Position",
-        width: 100,
         cellClass: "center-text",
         cellRenderer: formatPosition,
       },
-      { headerName: "Name", field: "Name", width: 200 },
+      { headerName: "Name", field: "Name" },
       {
         headerName: "Club",
         field: "Club",
-        width: 100,
         cellClass: "center-text",
       },
       {
         headerName: "Time",
         field: "Time",
-        width: 100,
         cellClass: "center-text",
       },
     ]
@@ -44,6 +40,14 @@ const ClassResultTable = (props) => {
     }
   }, [])
 
+  const autoSizeStrategy = {
+    type: "fitCellContents",
+  }
+
+  const autoSizeColumns = (props) => {
+    props.api.autoSizeAllColumns()
+  }
+
   return (
     <div>
       <div style={{ padding: "20px" }}>
@@ -54,6 +58,10 @@ const ClassResultTable = (props) => {
       </div>
       <div style={{ height: "600px" }}>
         <AgGridReact
+          firstDataRendered={autoSizeColumns}
+          onGridSizeChanged={autoSizeColumns}
+          autoSizeStrategy={autoSizeStrategy}
+          suppressColumnVirtualisation={true}
           rowData={props.resultData}
           onRowClicked={props.onNameSelected}
           columnDefs={columnDefs}

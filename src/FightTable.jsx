@@ -29,67 +29,57 @@ const FightTable = (props) => {
   const columnDefs = useMemo(() => {
     return [
       { headerName: "RaceID", field: "RaceID", hide: "true" },
-      { headerName: "Event", field: "Event", width: 70 },
+      { headerName: "Event", field: "Event" },
       {
         headerName: "Year",
         field: "Year",
-        width: 60,
         cellClass: "center-text",
       },
-      { headerName: "Area", field: "Area", width: 200 },
+      { headerName: "Area", field: "Area" },
       {
         headerName: "Class",
         field: "Class",
-        width: 75,
         cellClass: "center-text",
       },
       {
         headerName: "Runner 1",
         field: "Name1",
-        width: 125,
         cellRenderer: formatWinner1,
       },
       {
         headerName: "Club",
         field: "Club1",
-        width: 75,
         cellClass: "center-text",
       },
       {
         headerName: "Time",
         field: "Time1",
-        width: 75,
         cellClass: "center-text",
       },
       {
         headerName: "Place",
         field: "Position1",
-        width: 65,
         cellClass: "center-text",
         cellRenderer: formatPosition,
       },
       {
         headerName: "Runner 2",
         field: "Name2",
-        width: 125,
         cellRenderer: formatWinner2,
       },
       {
         headerName: "Club",
         field: "Club2",
-        width: 75,
         cellClass: "center-text",
       },
       {
         headerName: "Time",
         field: "Time2",
-        width: 75,
         cellClass: "center-text",
       },
       {
         headerName: "Place",
         field: "Position2",
-        width: 65,
         cellClass: "center-text",
         cellRenderer: formatPosition,
       },
@@ -103,8 +93,12 @@ const FightTable = (props) => {
     }
   }, [])
 
-  const onGridReady = (props) => {
-    props.api.sizeColumnsToFit()
+  const autoSizeStrategy = {
+    type: "fitCellContents",
+  }
+
+  const autoSizeColumns = (props) => {
+    props.api.autoSizeAllColumns()
   }
 
   const info =
@@ -132,21 +126,28 @@ const FightTable = (props) => {
         <Card className="mb-3">
           <Card.Header className="bg-arbor text-white">
             {info}
-            <Badge variant="light">Played {props.results.length}</Badge>
-            <Badge variant="light">
+            <Badge bg="warning" text="dark">
+              Played {props.results.length}
+            </Badge>
+            <Badge bg="warning" text="dark">
               {props.name1} Wins: {r1Wins}
             </Badge>
-            <Badge variant="light">
+            <Badge bg="warning" text="dark">
               {props.name2} Wins: {r2Wins}
             </Badge>
-            <Badge variant="light">Draws: {draws}</Badge>
+            <Badge bg="warning" text="dark">
+              Draws: {draws}
+            </Badge>
           </Card.Header>
           <Card.Body
             className="ag-theme-balham"
             style={{ padding: 0, height: "500px" }}
           >
             <AgGridReact
-              onGridReady={onGridReady}
+              firstDataRendered={autoSizeColumns}
+              onGridSizeChanged={autoSizeColumns}
+              autoSizeStrategy={autoSizeStrategy}
+              suppressColumnVirtualisation={true}
               onRowSelected={props.onFightRowSelected}
               rowData={props.results}
               columnDefs={columnDefs}

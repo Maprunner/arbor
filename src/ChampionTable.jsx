@@ -43,22 +43,20 @@ const ChampionTable = () => {
   const columnDefs = useMemo(() => {
     return [
       { headerName: "RaceID", field: "RaceID", hide: "true" },
-      { headerName: "Event", field: "Event", width: 120 },
+      { headerName: "Event", field: "Event" },
       {
         headerName: "Year",
         field: "Year",
-        width: 75,
         cellClass: "center-text",
       },
-      { headerName: "Area", field: "Area", width: 225 },
+      { headerName: "Area", field: "Area" },
       {
         headerName: "Assoc",
         field: "Association",
-        width: 75,
         cellClass: "center-text",
       },
-      { headerName: "Men", field: "M", flex: 1 },
-      { headerName: "Women", field: "W", flex: 1 },
+      { headerName: "Men", field: "M" },
+      { headerName: "Women", field: "W" },
     ]
   }, [])
 
@@ -73,6 +71,14 @@ const ChampionTable = () => {
     document.title = "Arbor | Champions"
   }, [])
 
+  const autoSizeStrategy = {
+    type: "fitCellContents",
+  }
+
+  const autoSizeColumns = (props) => {
+    props.api.autoSizeAllColumns()
+  }
+
   return (
     <div className="row">
       <div className="col-md-12">
@@ -83,6 +89,10 @@ const ChampionTable = () => {
             style={{ padding: 0, height: "400px" }}
           >
             <AgGridReact
+              firstDataRendered={autoSizeColumns}
+              onGridSizeChanged={autoSizeColumns}
+              autoSizeStrategy={autoSizeStrategy}
+              suppressColumnVirtualisation={true}
               rowData={champions}
               onCellClicked={(event) => onCellClicked(event)}
               columnDefs={columnDefs}
