@@ -5,65 +5,66 @@ import "./css/ag-theme-balham.css"
 import { formatLink } from "./utils"
 
 const EventSummaryTable = (props) => {
-  const onGridReady = (props) => {
-    props.api.sizeColumnsToFit()
+  const autoSizeColumns = (props) => {
+    props.api.autoSizeAllColumns()
   }
 
   const columnDefs = useMemo(() => {
     return [
-      { headerName: "Event", field: "Event", width: 125 },
+      { headerName: "Event", field: "Event" },
       {
         headerName: "Year",
         field: "Year",
-        width: 75,
         cellClass: "center-text",
       },
+      { headerName: "Area", field: "Area" },
       {
         headerName: "Date",
         field: "Date",
-        width: 125,
         cellClass: "center-text",
       },
       {
         headerName: "Club",
         field: "Club",
-        width: 100,
         cellClass: "center-text",
       },
       {
         headerName: "Classes",
         field: "Classes",
-        width: 100,
         cellClass: "center-text",
       },
       {
         headerName: "Runners",
         field: "Runners",
-        width: 100,
         cellClass: "center-text",
       },
-      { headerName: "Area", field: "Area", width: 300 },
       {
         headerName: "Link",
         field: "Link",
-        width: 75,
         cellRenderer: formatLink,
       },
       {
         headerName: "Assoc",
         field: "Association",
-        width: 100,
         cellClass: "center-text",
       },
     ]
   }, [])
 
+  const autoSizeStrategy = {
+    type: "fitCellContents",
+  }
+
   return (
-    <div style={{ height: "65px" }}>
+    <div style={{ width: "100%" }}>
       <AgGridReact
         rowData={props.rowData}
-        onGridReady={onGridReady}
+        firstDataRendered={autoSizeColumns}
+        onGridSizeChanged={autoSizeColumns}
         columnDefs={columnDefs}
+        autoSizeStrategy={autoSizeStrategy}
+        suppressColumnVirtualisation={true}
+        domLayout={"autoHeight"}
       />
     </div>
   )

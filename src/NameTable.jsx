@@ -16,38 +16,33 @@ const NameTable = (props) => {
   const columnDefs = useMemo(() => {
     return [
       { headerName: "RaceID", field: "RaceID", hide: "true" },
-      { headerName: "Event", field: "Event", width: 100 },
+      { headerName: "Event", field: "Event" },
       {
         headerName: "Year",
         field: "Year",
-        width: 75,
         cellClass: "center-text",
       },
       { headerName: "Area", field: "Area", flex: 1 },
       {
         headerName: "Class",
         field: "Class",
-        width: 75,
         cellClass: "center-text",
       },
       {
         headerName: "Position",
         field: "Position",
-        width: 75,
         cellClass: "center-text",
         cellRenderer: formatPosition,
       },
-      { headerName: "Name", field: "Name", width: 200 },
+      { headerName: "Name", field: "Name" },
       {
         headerName: "Club",
         field: "Club",
-        width: 100,
         cellClass: "center-text",
       },
       {
         headerName: "Time",
         field: "Time",
-        width: 100,
         cellClass: "center-text",
       },
     ]
@@ -60,8 +55,13 @@ const NameTable = (props) => {
     }
   }, [])
 
-  const onGridReady = (props) => {
-    props.api.sizeColumnsToFit()
+  const autoSizeStrategy = {
+    type: "fitCellContents",
+  }
+
+  const autoSizeColumns = (props) => {
+    console.log("Autosize")
+    props.api.autoSizeAllColumns()
   }
 
   let info
@@ -77,23 +77,40 @@ const NameTable = (props) => {
         <Card className="mb-3">
           <Card.Header className="bg-arbor text-white">
             {info}
-            <Badge pill variant="light">
+            <Badge bg="warning" text="dark">
               Total {props.results.length}
             </Badge>
-            <Badge variant="light">BOC {countEntries("British Long")}</Badge>
-            <Badge variant="light">BSC {countEntries("British Sprint")}</Badge>
-            <Badge variant="light">BMC {countEntries("British Middle")}</Badge>
-            <Badge variant="light">BNC {countEntries("British Night")}</Badge>
-            <Badge variant="light">JKD1 {countEntries("JK Day 1")}</Badge>
-            <Badge variant="light">JKD2 {countEntries("JK Day 2")}</Badge>
-            <Badge variant="light">JKS {countEntries("JK Sprint")}</Badge>
+            <Badge bg="warning" text="dark">
+              BOC {countEntries("British Long")}
+            </Badge>
+            <Badge bg="warning" text="dark">
+              BSC {countEntries("British Sprint")}
+            </Badge>
+            <Badge bg="warning" text="dark">
+              BMC {countEntries("British Middle")}
+            </Badge>
+            <Badge bg="warning" text="dark">
+              BNC {countEntries("British Night")}
+            </Badge>
+            <Badge bg="warning" text="dark">
+              JKD1 {countEntries("JK Day 1")}
+            </Badge>
+            <Badge bg="warning" text="dark">
+              JKD2 {countEntries("JK Day 2")}
+            </Badge>
+            <Badge bg="warning" text="dark">
+              JKS {countEntries("JK Sprint")}
+            </Badge>
           </Card.Header>
           <Card.Body
             className="ag-theme-balham"
             style={{ padding: 0, height: "400px" }}
           >
             <AgGridReact
-              onGridReady={onGridReady}
+              firstDataRendered={autoSizeColumns}
+              onGridSizeChanged={autoSizeColumns}
+              autoSizeStrategy={autoSizeStrategy}
+              suppressColumnVirtualisation={true}
               onRowSelected={props.onRowSelected}
               rowData={props.results}
               columnDefs={columnDefs}

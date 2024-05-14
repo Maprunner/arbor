@@ -14,7 +14,7 @@ const ClassFilter = (props) => {
     return (
       <Button
         className="m-1"
-        variant="outline-secondary"
+        bg="outline-secondary"
         onClick={onClickSingleClass}
         key={index}
         size="sm"
@@ -28,12 +28,7 @@ const ClassFilter = (props) => {
   return (
     <div>
       <ButtonToolbar>
-        <Button
-          className="m-1"
-          variant="info"
-          onClick={onClickAllClasses}
-          size="sm"
-        >
+        <Button className="m-1" bg="info" onClick={onClickAllClasses} size="sm">
           Show all
         </Button>
         {buttons}

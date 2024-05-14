@@ -13,8 +13,8 @@ const EventsTable = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const onGridReady = (event) => {
-    event.api.sizeColumnsToFit()
+  const autoSizeColumns = (props) => {
+    props.api.autoSizeAllColumns()
   }
 
   const onRowSelected = (event) => {
@@ -27,46 +27,39 @@ const EventsTable = () => {
   const columnDefs = useMemo(() => {
     return [
       { headerName: "RaceID", field: "RaceID", hide: "true" },
-      { headerName: "Event", field: "Event", width: 100 },
+      { headerName: "Event", field: "Event" },
       {
         headerName: "Year",
         field: "Year",
-        width: 75,
         cellClass: "center-text",
       },
       {
         headerName: "Date",
         field: "Date",
-        width: 100,
         cellClass: "center-text",
       },
       {
         headerName: "Club",
         field: "Club",
-        width: 100,
         cellClass: "center-text",
       },
       {
         headerName: "Classes",
         field: "Classes",
-        width: 100,
         cellClass: "center-text",
       },
       {
         headerName: "Runners",
         field: "Runners",
-        width: 100,
         cellClass: "center-text",
       },
       {
         headerName: "Area",
         field: "Area",
-        flex: 1,
       },
       {
         headerName: "Link",
         field: "Link",
-        width: 75,
         cellRenderer: formatLink,
         filter: false,
         sortable: false,
@@ -74,7 +67,6 @@ const EventsTable = () => {
       {
         headerName: "Assoc",
         field: "Association",
-        width: 100,
         cellClass: "center-text",
       },
     ]
@@ -91,6 +83,10 @@ const EventsTable = () => {
     document.title = "Arbor"
   }, [])
 
+  const autoSizeStrategy = {
+    type: "fitCellContents",
+  }
+
   return (
     <div className="row">
       <div className="col-md-12">
@@ -101,7 +97,10 @@ const EventsTable = () => {
             style={{ padding: 0, height: "400px" }}
           >
             <AgGridReact
-              onGridReady={onGridReady}
+              onGridReady={autoSizeColumns}
+              onGridSizeChanged={autoSizeColumns}
+              autoSizeStrategy={autoSizeStrategy}
+              suppressColumnVirtualisation={true}
               onRowSelected={onRowSelected}
               rowData={events}
               columnDefs={columnDefs}
