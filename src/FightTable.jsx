@@ -122,6 +122,8 @@ const FightTable = (props) => {
 
   const rowSelection = {
     mode: "singleRow",
+    enableClickSelection: "enableSelection",
+    checkboxes: false,
   }
 
   return (

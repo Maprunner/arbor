@@ -65,6 +65,8 @@ const NameTable = (props) => {
 
   const rowSelection = {
     mode: "singleRow",
+    enableClickSelection: "enableSelection",
+    checkboxes: false,
   }
 
   let info
