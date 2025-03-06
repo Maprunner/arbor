@@ -92,7 +92,7 @@ const EventsTable = () => {
     enableClickSelection: "enableSelection",
     checkboxes: false,
   }
-
+  
   return (
     <div className="row">
       <div className="col-md-12">

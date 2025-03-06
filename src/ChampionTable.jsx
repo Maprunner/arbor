@@ -79,6 +79,7 @@ const ChampionTable = () => {
     props.api.autoSizeAllColumns()
   }
 
+
   const rowSelection = {
     mode: "singleRow",
     enableClickSelection: "enableSelection",
