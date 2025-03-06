@@ -58,7 +58,7 @@ const ClassResultTable = (props) => {
       </div>
       <div style={{ height: "600px" }}>
         <AgGridReact
-          firstDataRendered={autoSizeColumns}
+          onFirstDataRendered={autoSizeColumns}
           onGridSizeChanged={autoSizeColumns}
           autoSizeStrategy={autoSizeStrategy}
           suppressColumnVirtualisation={true}

@@ -66,6 +66,10 @@ const SingleEventTable = () => {
     dispatch(fetchResults(raceID))
   }
 
+  const rowSelection = {
+    mode: "singleRow",
+  }
+
   useEffect(() => {
     document.title =
       getEventAbbreviation(currentEventDetails) || "Arbor | Event results"
@@ -90,7 +94,7 @@ const SingleEventTable = () => {
               classData={classData}
               onNameSelected={onNameSelected}
               onClassFilterUpdated={onClassFilterUpdated}
-              rowSelection="single"
+              rowSelection={rowSelection}
             />
           </Card.Body>
         </Card>

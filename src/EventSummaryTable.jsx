@@ -59,7 +59,7 @@ const EventSummaryTable = (props) => {
     <div style={{ width: "100%" }}>
       <AgGridReact
         rowData={props.rowData}
-        firstDataRendered={autoSizeColumns}
+        onFirstDataRendered={autoSizeColumns}
         onGridSizeChanged={autoSizeColumns}
         columnDefs={columnDefs}
         autoSizeStrategy={autoSizeStrategy}

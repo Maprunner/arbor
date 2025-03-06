@@ -79,6 +79,10 @@ const ChampionTable = () => {
     props.api.autoSizeAllColumns()
   }
 
+  const rowSelection = {
+    mode: "singleRow",
+  }
+
   return (
     <div className="row">
       <div className="col-md-12">
@@ -89,7 +93,7 @@ const ChampionTable = () => {
             style={{ padding: 0, height: "400px" }}
           >
             <AgGridReact
-              firstDataRendered={autoSizeColumns}
+              onFirstDataRendered={autoSizeColumns}
               onGridSizeChanged={autoSizeColumns}
               autoSizeStrategy={autoSizeStrategy}
               suppressColumnVirtualisation={true}
@@ -97,7 +101,7 @@ const ChampionTable = () => {
               onCellClicked={(event) => onCellClicked(event)}
               columnDefs={columnDefs}
               defaultColDef={defaultColDef}
-              rowSelection="single"
+              rowSelection={rowSelection}
             />
           </Card.Body>
         </Card>

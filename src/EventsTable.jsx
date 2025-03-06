@@ -87,6 +87,10 @@ const EventsTable = () => {
     type: "fitCellContents",
   }
 
+  const rowSelection = {
+    mode: "singleRow",
+  }
+
   return (
     <div className="row">
       <div className="col-md-12">
@@ -105,7 +109,7 @@ const EventsTable = () => {
               rowData={events}
               columnDefs={columnDefs}
               defaultColDef={defaultColDef}
-              rowSelection="single"
+              rowSelection={rowSelection}
             />
           </Card.Body>
         </Card>
