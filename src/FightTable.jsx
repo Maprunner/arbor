@@ -120,6 +120,12 @@ const FightTable = (props) => {
   }
   const draws = props.results.length - r1Wins - r2Wins
 
+  const rowSelection = {
+    mode: "singleRow",
+    enableClickSelection: "enableSelection",
+    checkboxes: false,
+  }
+
   return (
     <div className="row">
       <div className="col-md-12">
@@ -144,7 +150,7 @@ const FightTable = (props) => {
             style={{ padding: 0, height: "500px" }}
           >
             <AgGridReact
-              firstDataRendered={autoSizeColumns}
+              onFirstDataRendered={autoSizeColumns}
               onGridSizeChanged={autoSizeColumns}
               autoSizeStrategy={autoSizeStrategy}
               suppressColumnVirtualisation={true}
@@ -152,7 +158,7 @@ const FightTable = (props) => {
               rowData={props.results}
               columnDefs={columnDefs}
               defaultColDef={defaultColDef}
-              rowSelection="single"
+              rowSelection={rowSelection}
             />
           </Card.Body>
         </Card>

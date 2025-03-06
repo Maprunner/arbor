@@ -22,14 +22,15 @@ class Import
     $this->db->begin();
     $this->id = $f3->get('PARAMS.raceid');
     echo "Event ID = " . $this->id . "<br>";
-    $file = $f3->get('PARAMS.file');
+    $dir = "C:/tmp/";
+    $file = $dir.$f3->get('PARAMS.file');
     echo "File = " . $file . "<br>";
 
-    if (file_exists('data/' . $file . '.xml')) {
-      $this->importXML('data/' . $file . '.xml');
+    if (file_exists($file . '.xml')) {
+      $this->importXML($file . '.xml');
     } else {
-      if (file_exists('data/' . $file . '.csv')) {
-        $this->importCSV('data/' . $file . '.csv');
+      if (file_exists($file . '.csv')) {
+        $this->importCSV($file . '.csv');
       } else {
         echo "File not found.<br>";
       }
@@ -217,8 +218,11 @@ class Import
         $classTable->Class = $class->ClassShortName;
         $classTable->Length = 0;
         $classTable->Runners = 0;
+        echo "Save " . $class->ClassShortName . ": " . $race->RaceID . ": ".$classTable->ClassID."<br>";
         $classTable->save();
-        echo "Save " . $class->ClassShortName . "<br>" . $race->RaceID . "<br>";
+        // TODO: shouldn't need to do this but save is not returning a hydrated object
+        // only started happening for BNC 2025 update
+        $classTable->load(array('RaceID=? AND Class=?', $race->RaceID, $classTable->Class = $class->ClassShortName));
         $newClass = false;
         $classRunners = 0;
       }
@@ -234,11 +238,14 @@ class Import
         // removes commas to avoid problems with CSV import in Excel: not a problem any longer but anyway...
         $result->Name = str_replace(',', ' ', $runner);
         // horrid mess to sort out character mangling through various text files
-        // make sure XML file decalres UTF-8: save via Notepad if necessary
+        // make sure XML file declares UTF-8: save via Notepad if necessary
         if (!$this->isUTF8($result->Name)) {
           $result->Name = iconv("ISO-8859-1", "UTF-8//TRANSLIT", $result->Name);
         }
         $club = $personresult->Club->Name;
+        if ($club === null) {
+          $club = "";
+        }
         $result->Club = str_replace(',', ' ', $club);
         if (!$this->isUTF8($result->Club)) {
           $result->Club = iconv("ISO-8859-1", "UTF-8//TRANSLIT", $result->Club);
@@ -250,15 +257,14 @@ class Import
         $result->Position = $personresult->Result->ResultPosition;
         $result->Status = $this->getV2Status($personresult->Result->CompetitorStatus->attributes());
         if ($result->Status != 'OK') $result->Position = 999;
-        $result->save();
         echo 'Save ' . $result->Name . '<br>';
+        $result->save();
         $classRunners++;
       }
       // update class details
       $classTable->Length = $personresult->Result->CourseLength;
       $classTable->Runners = $classRunners;
       $classTable->save();
-      // echo 'Update '.$class->ClassShortName.'<br>';
       echo $classRunners . "  " . $class->ClassShortName . " at " . date('H:i:s') . "<br>";
       $newClass = true;
       $classes++;
@@ -350,7 +356,7 @@ class Import
 
   private function isUTF8($string)
   {
-    return (utf8_encode(utf8_decode($string)) == $string);
+    return mb_check_encoding($string, "UTF-8");
   }
 
   private function getTimeFromSeconds($secs)

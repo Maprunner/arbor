@@ -7,6 +7,17 @@ import Page from "./Page.jsx"
 import reducers from "./reducers/reducers.js"
 import { fetchEvents } from "./actions/actions.js"
 import "bootstrap/dist/css/bootstrap.min.css"
+import {
+  AllCommunityModule,
+  ModuleRegistry,
+  provideGlobalGridOptions,
+} from "ag-grid-community"
+
+// Register all community features
+ModuleRegistry.registerModules([AllCommunityModule])
+
+// Mark all grids as using legacy themes
+provideGlobalGridOptions({ theme: "legacy" })
 
 export const store = configureStore({
   reducer: reducers,

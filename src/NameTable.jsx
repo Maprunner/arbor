@@ -60,8 +60,13 @@ const NameTable = (props) => {
   }
 
   const autoSizeColumns = (props) => {
-    console.log("Autosize")
     props.api.autoSizeAllColumns()
+  }
+
+  const rowSelection = {
+    mode: "singleRow",
+    enableClickSelection: "enableSelection",
+    checkboxes: false,
   }
 
   let info
@@ -107,7 +112,7 @@ const NameTable = (props) => {
             style={{ padding: 0, height: "400px" }}
           >
             <AgGridReact
-              firstDataRendered={autoSizeColumns}
+              onFirstDataRendered={autoSizeColumns}
               onGridSizeChanged={autoSizeColumns}
               autoSizeStrategy={autoSizeStrategy}
               suppressColumnVirtualisation={true}
@@ -115,7 +120,7 @@ const NameTable = (props) => {
               rowData={props.results}
               columnDefs={columnDefs}
               defaultColDef={defaultColDef}
-              rowSelection="single"
+              rowSelection={rowSelection}
             />
           </Card.Body>
         </Card>
