@@ -24,7 +24,7 @@ const Footer = () => (
             available and see what you find.
           </p>
           <p>
-            Copyright © 2025{" "}
+            Copyright © 2026{" "}
             <a
               href="https://www.maprunner.co.uk"
               target="_blank"
