@@ -92,7 +92,7 @@ const EventsTable = () => {
     enableClickSelection: "enableSelection",
     checkboxes: false,
   }
-  
+
   return (
     <div className="row">
       <div className="col-md-12">
@@ -112,6 +112,7 @@ const EventsTable = () => {
               columnDefs={columnDefs}
               defaultColDef={defaultColDef}
               rowSelection={rowSelection}
+              domLayout={"normal"}
             />
           </Card.Body>
         </Card>

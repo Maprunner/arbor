@@ -22,7 +22,7 @@ class Import
     $this->db->begin();
     $this->id = $f3->get('PARAMS.raceid');
     echo "Event ID = " . $this->id . "<br>";
-    $dir = "C:/tmp/";
+    $dir = "C:/tmp/jk/";
     $file = $dir.$f3->get('PARAMS.file');
     echo "File = " . $file . "<br>";
 
@@ -112,13 +112,13 @@ class Import
     $classRunners = 0;
     $classID = 0;
 
-    define('FIELD_COUNT', 5);
-    define('POS_IDX', 0);
-    define('FIRST_NAME_IDX', 1);
-    //define('LAST_NAME_IDX', 1);
-    define('CLUB_IDX', 2);
-    define('CLASS_IDX', 3);
-    define('TIME_IDX', 4);
+    define('FIELD_COUNT', 7);
+    define('POS_IDX', 1);
+    define('FIRST_NAME_IDX', 2);
+    define('LAST_NAME_IDX', 3);
+    define('CLUB_IDX', 4);
+    define('CLASS_IDX', 0);
+    define('TIME_IDX', 6);
     //define('STATUS_IDX', 5);
     //define('LENGTH_IDX', 0);
 
@@ -148,6 +148,9 @@ class Import
         $classTable->Length = 0;
         $classTable->Runners = 0;
         $classTable->save();
+        // TODO: shouldn't need to do this but save is not returning a hydrated object
+        // only started happening for BNC 2025 update
+        $classTable->load(array('RaceID=? AND Class=?', $this->id, $r[CLASS_IDX]));
         echo "Save " . $r[CLASS_IDX] . "<br>";
         $classRunners = 0;
         $oldClass = $r[CLASS_IDX];
@@ -158,8 +161,8 @@ class Import
       $result->BOFID = 0;
       $result->Year = $race->Year;
       $result->Event = $this->getEventAbbr($race->Event);
-      //$result->Name = $r[FIRST_NAME_IDX] . ' ' . $r[LAST_NAME_IDX];
-      $result->Name = $r[FIRST_NAME_IDX];
+      $result->Name = $r[FIRST_NAME_IDX] . ' ' . $r[LAST_NAME_IDX];
+      //$result->Name = $r[FIRST_NAME_IDX];
       $result->Club = $r[CLUB_IDX];
       $result->Card = 0;
       $result->Class = $r[CLASS_IDX];
@@ -173,7 +176,7 @@ class Import
       }
       //$result->Status = $r[STATUS_IDX];
       $result->save();
-      //echo 'Save '.$result->Name.'<br>';
+      echo 'Save '.$result->Name.'<br>';
       $classRunners++;
     }
     // write final class update
@@ -297,6 +300,9 @@ class Import
         $classTable->Runners = 0;
         $classTable->save();
         // echo "Save ".$class->Class->Name."<br>";
+        // TODO: shouldn't need to do this but save is not returning a hydrated object
+        // only started happening for BNC 2025 update
+        $classTable->load(array('RaceID=? AND Class=?', $race->RaceID, $classTable->Class = $class->Class->Name));
         $newClass = false;
         $classRunners = 0;
       }
@@ -317,6 +323,9 @@ class Import
           $result->Name = iconv("ISO-8859-1", "UTF-8//TRANSLIT", $result->Name);
         }
         $club = $personresult->Organisation->Name;
+        if ($club === null) {
+          $club = "";
+        }
         $result->Club = str_replace(',', ' ', $club);
         if (!$this->isUTF8($result->Club)) {
           $result->Club = iconv("ISO-8859-1", "UTF-8//TRANSLIT", $result->Club);
