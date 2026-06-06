@@ -22,7 +22,7 @@ class Import
     $this->db->begin();
     $this->id = $f3->get('PARAMS.raceid');
     echo "Event ID = " . $this->id . "<br>";
-    $dir = "C:/tmp/jk/";
+    $dir = "d:/temp/";
     $file = $dir.$f3->get('PARAMS.file');
     echo "File = " . $file . "<br>";
 
